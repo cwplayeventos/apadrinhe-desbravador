@@ -1,4 +1,4 @@
-```html
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -926,49 +926,72 @@
                 }
 
 
-                // ==========================================
-                // LOCALIZAR DADOS DO PIX
-                // ==========================================
+               // ==========================================
+// LOCALIZAR DADOS DO PIX
+// ==========================================
 
-                let dadosPix =
-                    resultado;
+const dadosPix = resultado;
 
+const qrBase64 =
+    dadosPix.qr_code_base64;
 
-                if (resultado.pagamento) {
-
-                    dadosPix =
-                        resultado.pagamento;
-
-                }
+const qrCode =
+    dadosPix.qr_code;
 
 
-                const qrBase64 =
-                    dadosPix
-                        ?.point_of_interaction
-                        ?.transaction_data
-                        ?.qr_code_base64;
+if (!qrBase64) {
+
+    console.error(
+        "Resposta sem qr_code_base64:",
+        resultado
+    );
+
+    throw new Error(
+        "O Mercado Pago criou o pagamento, mas não retornou o QR Code."
+    );
+
+}
 
 
-                const qrCode =
-                    dadosPix
-                        ?.point_of_interaction
-                        ?.transaction_data
-                        ?.qr_code;
+// ==========================================
+// MOSTRAR QR CODE
+// ==========================================
+
+document
+    .getElementById("pixQrCode")
+    .src =
+    "data:image/png;base64," +
+    qrBase64;
 
 
-                if (!qrBase64) {
+// ==========================================
+// MOSTRAR CÓDIGO PIX
+// ==========================================
 
-                    console.error(
-                        "Resposta sem qr_code_base64:",
-                        resultado
-                    );
+document
+    .getElementById("pixCodigo")
+    .value =
+    qrCode || "";
 
-                    throw new Error(
-                        "O Mercado Pago criou o pagamento, mas não retornou o QR Code."
-                    );
 
-                }
+// ==========================================
+// MOSTRAR VALOR
+// ==========================================
 
+document
+    .getElementById("pixValor")
+    .textContent =
+    formatarValor(valor);
+
+
+// ==========================================
+// SUCESSO
+// ==========================================
+
+console.log(
+    "PIX criado com sucesso:",
+    dadosPix.pagamento_id
+);
 
                 // ==========================================
                 // MOSTRAR QR CODE
@@ -1598,4 +1621,3 @@
 
 </body>
 </html>
-```
