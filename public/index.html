@@ -35,12 +35,14 @@
             font-size: 16px;
             opacity: 0.9;
         }
+
         .brand-logo {
             width: 100px;
             height: 100px;
-            object-fit: contain; /* Evita que o seu logo fique esticado ou achatado */
-            vertical-align: middle; /* Alinha o logo verticalmente caso haja texto ao lado */
+            object-fit: contain;
+            vertical-align: middle;
         }
+
         .container {
             max-width: 600px;
             margin: 40px auto;
@@ -126,23 +128,6 @@
             font-size: 16px;
         }
 
-        .botao {
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 10px;
-            background: #d9a441;
-            color: #071a33;
-            font-size: 17px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        .botao:hover {
-            opacity: 0.9;
-        }
-
         .seguranca {
             text-align: center;
             margin-top: 20px;
@@ -156,9 +141,11 @@
             color: #667085;
             font-size: 13px;
         }
-#paymentBrick_container {
-    margin-top: 25px;
-}
+
+        #paymentBrick_container {
+            margin-top: 25px;
+        }
+
         @media (max-width: 500px) {
             .topo h1 {
                 font-size: 24px;
@@ -174,18 +161,30 @@
 <body>
 
     <header class="topo">
+
         <a class="brand" href="#">
-  <img src="assets/logo.png" alt="Guerreiros do Baca" class="brand-logo">
-</a>
+            <img
+                src="assets/logo.png"
+                alt="Guerreiros do Baca"
+                class="brand-logo"
+            >
+        </a>
+
         <h1>APADRINHE UM DESBRAVADOR</h1>
-        <p>Uma oportunidade pode mudar uma vida inteira.</p>
+
+        <p>
+            Uma oportunidade pode mudar uma vida inteira.
+        </p>
+
     </header>
 
     <main class="container">
 
         <div class="card">
 
-            <h2>Quero fazer parte dessa história</h2>
+            <h2>
+                Quero fazer parte dessa história
+            </h2>
 
             <p class="descricao">
                 Escolha um valor para contribuir com a participação
@@ -206,51 +205,87 @@
             >
 
             <div class="valores">
-                <button class="valor-btn" onclick="selecionarValor(50)">
+
+                <button
+                    type="button"
+                    class="valor-btn"
+                    onclick="selecionarValor(50)"
+                >
                     R$ 50
                 </button>
 
-                <button class="valor-btn" onclick="selecionarValor(100)">
+                <button
+                    type="button"
+                    class="valor-btn"
+                    onclick="selecionarValor(100)"
+                >
                     R$ 100
                 </button>
 
-                <button class="valor-btn" onclick="selecionarValor(200)">
+                <button
+                    type="button"
+                    class="valor-btn"
+                    onclick="selecionarValor(200)"
+                >
                     R$ 200
                 </button>
 
-                <button class="valor-btn" onclick="selecionarValor(500)">
+                <button
+                    type="button"
+                    class="valor-btn"
+                    onclick="selecionarValor(500)"
+                >
                     R$ 500
                 </button>
 
-                <button class="valor-btn" onclick="selecionarValor(1000)">
+                <button
+                    type="button"
+                    class="valor-btn"
+                    onclick="selecionarValor(1000)"
+                >
                     R$ 1.000
                 </button>
 
-                <button class="valor-btn" onclick="selecionarValor(2000)">
+                <button
+                    type="button"
+                    class="valor-btn"
+                    onclick="selecionarValor(2000)"
+                >
                     R$ 2.000
                 </button>
+
             </div>
 
             <div class="campo">
-                <label for="nome">Seu nome</label>
+
+                <label for="nome">
+                    Seu nome
+                </label>
+
                 <input
                     type="text"
                     id="nome"
                     placeholder="Digite seu nome"
                 >
+
             </div>
 
             <div class="campo">
-                <label for="email">Seu e-mail</label>
+
+                <label for="email">
+                    Seu e-mail
+                </label>
+
                 <input
                     type="email"
                     id="email"
                     placeholder="Digite seu e-mail"
                 >
+
             </div>
 
-            
-<div id="paymentBrick_container"></div>
+            <div id="paymentBrick_container"></div>
+
             <p class="seguranca">
                 🔒 Pagamento processado com segurança pelo Mercado Pago.
             </p>
@@ -260,197 +295,522 @@
     </main>
 
     <footer>
-        Clube de Desbravadores Guerreiros do Baca | DSA Barretos • 2027
+        Clube de Desbravadores Guerreiros do Baca |
+        DSA Barretos • 2027
     </footer>
 
+
+    <!-- ==========================================
+         MERCADO PAGO SDK
+    ========================================== -->
+
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+
+
     <script>
-        function selecionarValor(valor) {
-            document.getElementById("valor").value = valor;
+
+        // ==========================================
+        // CONFIGURAÇÃO
+        // ==========================================
+
+        const publicKey = "APP_USR-f983117b-67e9-403c-a8ee-97ade3d4537f";
+
+        const mp = new MercadoPago(publicKey);
+
+        const bricksBuilder = mp.bricks();
+
+        let paymentBrickController = null;
+
+
+        // ==========================================
+        // FORMATAR VALOR
+        // ==========================================
+
+        function formatarValor(valor) {
+
+            return Number(valor).toLocaleString(
+                "pt-BR",
+                {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }
+            );
+
         }
 
-        function continuarPagamento() {
-            const valor = document.getElementById("valor").value;
-            const nome = document.getElementById("nome").value;
-            const email = document.getElementById("email").value;
+
+        // ==========================================
+        // SELECIONAR VALOR
+        // ==========================================
+
+        function selecionarValor(valor) {
+
+            document.getElementById("valor").value = valor;
+
+            renderPaymentBrick();
+
+        }
+
+
+        // ==========================================
+        // RENDERIZAR PAYMENT BRICK
+        // ==========================================
+
+        async function renderPaymentBrick() {
+
+            const valorInput =
+                document.getElementById("valor");
+
+            const valor =
+                Number(valorInput.value);
 
             if (!valor || valor <= 0) {
-                alert("Informe o valor que deseja contribuir.");
+
                 return;
+
             }
 
-            if (!nome) {
-                alert("Informe seu nome.");
-                return;
-            }
 
-            if (!email) {
-                alert("Informe seu e-mail.");
-                return;
-            }
+            // Remove Brick anterior
 
-            alert(
-                "Dados preenchidos corretamente!\\n\\n" +
-                "Valor: R$ " + valor + "\\n" +
-                "Nome: " + nome + "\\n" +
-                "E-mail: " + email
-            );
-        }
-    </script>
-```html
-<script src="https://sdk.mercadopago.com/js/v2"></script>
+            if (paymentBrickController) {
 
-<script>
-    const publicKey = "APP_USR-f983117b-67e9-403c-a8ee-97ade3d4537f";
+                try {
 
-    const mp = new MercadoPago(publicKey);
-    const bricksBuilder = mp.bricks();
+                    await paymentBrickController.unmount();
 
-    let paymentBrickController = null;
+                } catch (erro) {
 
-    async function renderPaymentBrick() {
+                    console.warn(
+                        "Não foi possível desmontar o Brick anterior:",
+                        erro
+                    );
 
-        const valorInput = document.getElementById("valor");
-        const valor = Number(valorInput.value);
-
-        if (!valor || valor <= 0) {
-            alert("Informe o valor que deseja contribuir.");
-            return;
-        }
-
-        // Se já existe um Brick, remove antes de criar outro
-        if (paymentBrickController) {
-            await paymentBrickController.unmount();
-            paymentBrickController = null;
-        }
-
-        const settings = {
-            initialization: {
-                amount: valor
-            },
-
-            customization: {
-                paymentMethods: {
-                    creditCard: "all",
-                    debitCard: "all",
-                    ticket: "all",
-                    bankTransfer: "all"
                 }
-            },
 
-            callbacks: {
+                paymentBrickController = null;
 
-                onReady: () => {
-                    console.log("Payment Brick carregado!");
+            }
+
+
+            // ==========================================
+            // CONFIGURAÇÃO DO PAYMENT BRICK
+            // ==========================================
+
+            const settings = {
+
+                initialization: {
+
+                    amount: valor
+
                 },
 
-                onSubmit: async ({ selectedPaymentMethod, formData }) => {
 
-                    console.log("Método selecionado:", selectedPaymentMethod);
-                    console.log("Dados do formulário:", formData);
+                customization: {
 
-                    const nome = document.getElementById("nome").value.trim();
-                    const email = document.getElementById("email").value.trim();
-                    const valorAtual = Number(document.getElementById("valor").value);
+                    paymentMethods: {
 
-                    if (!valorAtual || valorAtual <= 0) {
-                        alert("Informe um valor válido.");
-                        return;
+                        creditCard: "all",
+
+                        debitCard: "all",
+
+                        ticket: "all",
+
+                        bankTransfer: "all"
+
                     }
 
-                    if (!nome) {
-                        alert("Informe seu nome.");
-                        return;
-                    }
+                },
 
-                    if (!email) {
-                        alert("Informe seu e-mail.");
-                        return;
-                    }
 
-                    try {
+                callbacks: {
 
-                        const dadosPagamento = {
-                            ...formData,
 
-                            transaction_amount: valorAtual,
+                    // ==========================================
+                    // BRICK PRONTO
+                    // ==========================================
 
-                            payer: {
-                                ...(formData.payer || {}),
-                                first_name: nome,
-                                email: email
-                            }
-                        };
+                    onReady: () => {
 
-                        const resposta = await fetch("/api/processar-pagamento", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify(dadosPagamento)
-                        });
+                        console.log(
+                            "Payment Brick carregado."
+                        );
 
-                        const resultado = await resposta.json();
+                    },
 
-                        console.log("Resposta do servidor:", resultado);
 
-                        if (resultado.sucesso) {
+                    // ==========================================
+                    // ENVIO DO PAGAMENTO
+                    // ==========================================
 
-                            alert("Pagamento enviado com sucesso!");
+                    onSubmit: async ({
+                        selectedPaymentMethod,
+                        formData
+                    }) => {
 
-                            console.log(
-                                "Pagamento Mercado Pago:",
-                                resultado.pagamento
+                        console.log(
+                            "Método selecionado:",
+                            selectedPaymentMethod
+                        );
+
+
+                        const nome =
+                            document
+                                .getElementById("nome")
+                                .value
+                                .trim();
+
+
+                        const email =
+                            document
+                                .getElementById("email")
+                                .value
+                                .trim();
+
+
+                        const valorAtual =
+                            Number(
+                                document
+                                    .getElementById("valor")
+                                    .value
                             );
 
-                        } else {
+
+                        // ==========================================
+                        // VALIDAÇÕES
+                        // ==========================================
+
+                        if (
+                            !valorAtual ||
+                            valorAtual <= 0
+                        ) {
 
                             alert(
-                                "Não foi possível processar o pagamento.\n\n" +
-                                (resultado.erro || "")
+                                "Informe um valor válido."
                             );
 
-                            console.error("Erro:", resultado.erro);
+                            return;
+
                         }
 
-                    } catch (erro) {
 
-                        console.error("Erro de comunicação:", erro);
+                        if (!nome) {
 
-                        alert(
-                            "Erro ao conectar com o servidor."
+                            alert(
+                                "Informe seu nome."
+                            );
+
+                            return;
+
+                        }
+
+
+                        if (!email) {
+
+                            alert(
+                                "Informe seu e-mail."
+                            );
+
+                            return;
+
+                        }
+
+
+                        // ==========================================
+                        // DADOS DO PAGAMENTO
+                        // ==========================================
+
+                        const dadosPagamento = {
+
+                            ...formData,
+
+                            transaction_amount:
+                                valorAtual,
+
+                            payer: {
+
+                                ...(formData.payer || {}),
+
+                                first_name:
+                                    nome,
+
+                                email:
+                                    email
+
+                            }
+
+                        };
+
+
+                        console.log(
+                            "Enviando pagamento..."
                         );
+
+
+                        // ==========================================
+                        // ENVIA PARA O SERVIDOR
+                        // ==========================================
+
+                        try {
+
+                            const resposta =
+                                await fetch(
+                                    "/api/processar-pagamento",
+                                    {
+                                        method: "POST",
+
+                                        headers: {
+                                            "Content-Type":
+                                                "application/json"
+                                        },
+
+                                        body:
+                                            JSON.stringify(
+                                                dadosPagamento
+                                            )
+                                    }
+                                );
+
+
+                            const resultado =
+                                await resposta.json();
+
+
+                            console.log(
+                                "Resposta do servidor:",
+                                resultado
+                            );
+
+
+                            // ==========================================
+                            // ERRO HTTP
+                            // ==========================================
+
+                            if (!resposta.ok) {
+
+                                alert(
+                                    "Não foi possível processar o pagamento.\n\n" +
+                                    (
+                                        resultado.erro ||
+                                        "Erro desconhecido."
+                                    )
+                                );
+
+                                return;
+
+                            }
+
+
+                            // ==========================================
+                            // STATUS DO MERCADO PAGO
+                            // ==========================================
+
+                            const status =
+                                resultado.status;
+
+
+                            // ==========================================
+                            // APROVADO
+                            // ==========================================
+
+                            if (
+                                status === "approved"
+                            ) {
+
+                                alert(
+                                    "Pagamento aprovado com sucesso!\n\n" +
+                                    "Valor: R$ " +
+                                    formatarValor(
+                                        valorAtual
+                                    )
+                                );
+
+
+                                console.log(
+                                    "PAGAMENTO APROVADO:",
+                                    resultado.pagamento
+                                );
+
+
+                                return;
+
+                            }
+
+
+                            // ==========================================
+                            // PENDENTE
+                            // ==========================================
+
+                            if (
+                                status === "pending"
+                            ) {
+
+                                alert(
+                                    "Pagamento pendente.\n\n" +
+                                    "Aguardando confirmação do Mercado Pago."
+                                );
+
+
+                                console.log(
+                                    "PAGAMENTO PENDENTE:",
+                                    resultado.pagamento
+                                );
+
+
+                                return;
+
+                            }
+
+
+                            // ==========================================
+                            // EM ANÁLISE
+                            // ==========================================
+
+                            if (
+                                status === "in_process"
+                            ) {
+
+                                alert(
+                                    "Pagamento em análise pelo Mercado Pago.\n\n" +
+                                    "Aguarde a confirmação."
+                                );
+
+
+                                console.log(
+                                    "PAGAMENTO EM ANÁLISE:",
+                                    resultado.pagamento
+                                );
+
+
+                                return;
+
+                            }
+
+
+                            // ==========================================
+                            // RECUSADO
+                            // ==========================================
+
+                            if (
+                                status === "rejected"
+                            ) {
+
+                                alert(
+                                    "Pagamento recusado.\n\n" +
+                                    "Verifique os dados ou tente outra forma de pagamento."
+                                );
+
+
+                                console.error(
+                                    "PAGAMENTO RECUSADO:",
+                                    resultado.pagamento
+                                );
+
+
+                                return;
+
+                            }
+
+
+                            // ==========================================
+                            // OUTRO STATUS
+                            // ==========================================
+
+                            alert(
+                                resultado.mensagem ||
+                                "Pagamento recebido. Aguardando confirmação."
+                            );
+
+
+                        } catch (erro) {
+
+                            console.error(
+                                "Erro de comunicação:",
+                                erro
+                            );
+
+
+                            alert(
+                                "Erro ao conectar com o servidor.\n\n" +
+                                "Tente novamente."
+                            );
+
+                        }
+
+                    },
+
+
+                    // ==========================================
+                    // ERRO DO PAYMENT BRICK
+                    // ==========================================
+
+                    onError: (error) => {
+
+                        console.error(
+                            "Erro no Payment Brick:",
+                            error
+                        );
+
                     }
-                },
 
-                onError: (error) => {
-                    console.error("Erro no Payment Brick:", error);
                 }
+
+            };
+
+
+            // ==========================================
+            // CRIAR PAYMENT BRICK
+            // ==========================================
+
+            try {
+
+                paymentBrickController =
+                    await bricksBuilder.create(
+                        "payment",
+                        "paymentBrick_container",
+                        settings
+                    );
+
+            } catch (erro) {
+
+                console.error(
+                    "Erro ao criar Payment Brick:",
+                    erro
+                );
+
             }
-        };
 
-        paymentBrickController = await bricksBuilder.create(
-            "payment",
-            "paymentBrick_container",
-            settings
-        );
-    }
+        }
 
-    function selecionarValor(valor) {
 
-        document.getElementById("valor").value = valor;
+        // ==========================================
+        // ALTERAÇÃO MANUAL DO VALOR
+        // ==========================================
+
+        document
+            .getElementById("valor")
+            .addEventListener(
+                "change",
+                () => {
+
+                    renderPaymentBrick();
+
+                }
+            );
+
+
+        // ==========================================
+        // VALOR INICIAL
+        // ==========================================
+
+        document
+            .getElementById("valor")
+            .value = 50;
+
 
         renderPaymentBrick();
-    }
 
-    document.getElementById("valor").addEventListener("change", () => {
-        renderPaymentBrick();
-    });
-
-    // Carrega inicialmente com o primeiro valor sugerido
-    document.getElementById("valor").value = 50;
-    renderPaymentBrick();
-</script>
-```
+    </script>
 
 </body>
 </html>
