@@ -296,20 +296,36 @@
             );
         }
     </script>
+```html
 <script src="https://sdk.mercadopago.com/js/v2"></script>
 
 <script>
     const publicKey = "APP_USR-2ff07342-e525-474d-9e83-565c85d95e20";
 
     const mp = new MercadoPago(publicKey);
-
     const bricksBuilder = mp.bricks();
+
+    let paymentBrickController = null;
 
     async function renderPaymentBrick() {
 
+        const valorInput = document.getElementById("valor");
+        const valor = Number(valorInput.value);
+
+        if (!valor || valor <= 0) {
+            alert("Informe o valor que deseja contribuir.");
+            return;
+        }
+
+        // Se já existe um Brick, remove antes de criar outro
+        if (paymentBrickController) {
+            await paymentBrickController.unmount();
+            paymentBrickController = null;
+        }
+
         const settings = {
             initialization: {
-                amount: 50
+                amount: valor
             },
 
             customization: {
@@ -322,48 +338,88 @@
             },
 
             callbacks: {
+
                 onReady: () => {
                     console.log("Payment Brick carregado!");
                 },
 
                 onSubmit: async ({ selectedPaymentMethod, formData }) => {
 
-    console.log("Método selecionado:", selectedPaymentMethod);
-    console.log("Dados do formulário:", formData);
+                    console.log("Método selecionado:", selectedPaymentMethod);
+                    console.log("Dados do formulário:", formData);
 
-    try {
+                    const nome = document.getElementById("nome").value.trim();
+                    const email = document.getElementById("email").value.trim();
+                    const valorAtual = Number(document.getElementById("valor").value);
 
-        const resposta = await fetch("/api/processar-pagamento", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(formData)
-        });
+                    if (!valorAtual || valorAtual <= 0) {
+                        alert("Informe um valor válido.");
+                        return;
+                    }
 
-        const resultado = await resposta.json();
+                    if (!nome) {
+                        alert("Informe seu nome.");
+                        return;
+                    }
 
-        console.log("Resposta do servidor:", resultado);
+                    if (!email) {
+                        alert("Informe seu e-mail.");
+                        return;
+                    }
 
-        if (resultado.sucesso) {
+                    try {
 
-            alert("Pagamento enviado com sucesso!");
+                        const dadosPagamento = {
+                            ...formData,
 
-            console.log("Pagamento Mercado Pago:", resultado.pagamento);
+                            transaction_amount: valorAtual,
 
-        } else {
+                            payer: {
+                                ...(formData.payer || {}),
+                                first_name: nome,
+                                email: email
+                            }
+                        };
 
-            alert("Não foi possível processar o pagamento.");
+                        const resposta = await fetch("/api/processar-pagamento", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(dadosPagamento)
+                        });
 
-            console.error("Erro:", resultado.erro);
-        }
+                        const resultado = await resposta.json();
 
-    } catch (erro) {
+                        console.log("Resposta do servidor:", resultado);
 
-        console.error("Erro de comunicação:", erro);
+                        if (resultado.sucesso) {
 
-        alert("Erro ao conectar com o servidor.");
-    }
+                            alert("Pagamento enviado com sucesso!");
+
+                            console.log(
+                                "Pagamento Mercado Pago:",
+                                resultado.pagamento
+                            );
+
+                        } else {
+
+                            alert(
+                                "Não foi possível processar o pagamento.\n\n" +
+                                (resultado.erro || "")
+                            );
+
+                            console.error("Erro:", resultado.erro);
+                        }
+
+                    } catch (erro) {
+
+                        console.error("Erro de comunicação:", erro);
+
+                        alert(
+                            "Erro ao conectar com o servidor."
+                        );
+                    }
                 },
 
                 onError: (error) => {
@@ -372,14 +428,29 @@
             }
         };
 
-        const paymentBrickController = await bricksBuilder.create(
+        paymentBrickController = await bricksBuilder.create(
             "payment",
             "paymentBrick_container",
             settings
         );
     }
 
+    function selecionarValor(valor) {
+
+        document.getElementById("valor").value = valor;
+
+        renderPaymentBrick();
+    }
+
+    document.getElementById("valor").addEventListener("change", () => {
+        renderPaymentBrick();
+    });
+
+    // Carrega inicialmente com o primeiro valor sugerido
+    document.getElementById("valor").value = 50;
     renderPaymentBrick();
 </script>
+```
+
 </body>
 </html>
