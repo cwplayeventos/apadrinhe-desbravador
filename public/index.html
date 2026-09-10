@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -41,6 +42,7 @@
             height: 100px;
             object-fit: contain;
             vertical-align: middle;
+            margin-bottom: 15px;
         }
 
         .container {
@@ -128,6 +130,153 @@
             font-size: 16px;
         }
 
+        /* ================================
+           ESCOLHA DO PAGAMENTO
+        ================================= */
+
+        .titulo-pagamento {
+            font-size: 18px;
+            font-weight: bold;
+            color: #071a33;
+            margin-top: 25px;
+            margin-bottom: 12px;
+        }
+
+        .opcoes-pagamento {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .opcao-pagamento {
+            border: 2px solid #d0d5dd;
+            background: white;
+            border-radius: 10px;
+            padding: 16px 10px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+            transition: 0.2s;
+        }
+
+        .opcao-pagamento:hover {
+            border-color: #d9a441;
+            background: #fffaf0;
+        }
+
+        .opcao-pagamento.ativo {
+            border-color: #500202;
+            background: #fff5f5;
+        }
+
+        .opcao-pagamento .icone {
+            display: block;
+            font-size: 28px;
+            margin-bottom: 7px;
+        }
+
+        /* ================================
+           PIX
+        ================================= */
+
+        #pixContainer {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #d0d5dd;
+            border-radius: 12px;
+            background: #fafafa;
+            text-align: center;
+        }
+
+        #pixContainer h3 {
+            color: #071a33;
+            margin-bottom: 8px;
+        }
+
+        .pix-descricao {
+            color: #667085;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        #pixQrCode {
+            width: 240px;
+            height: 240px;
+            object-fit: contain;
+            display: block;
+            margin: 15px auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: white;
+        }
+
+        .pix-valor {
+            font-size: 22px;
+            font-weight: bold;
+            color: #500202;
+            margin: 10px 0 15px;
+        }
+
+        .pix-codigo-label {
+            text-align: left;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        #pixCodigo {
+            width: 100%;
+            min-height: 100px;
+            resize: none;
+            padding: 12px;
+            border: 1px solid #d0d5dd;
+            border-radius: 8px;
+            font-size: 12px;
+            line-height: 1.4;
+            background: white;
+        }
+
+        .btn-copiar {
+            width: 100%;
+            margin-top: 10px;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #500202;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-copiar:hover {
+            background: #720404;
+        }
+
+        .btn-novo-pix {
+            width: 100%;
+            margin-top: 10px;
+            padding: 12px;
+            border: 1px solid #d0d5dd;
+            border-radius: 8px;
+            background: white;
+            color: #17202a;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        /* ================================
+           BRICK
+        ================================= */
+
+        #paymentBrick_container {
+            margin-top: 20px;
+        }
+
         .seguranca {
             text-align: center;
             margin-top: 20px;
@@ -135,24 +284,50 @@
             color: #667085;
         }
 
+        .mensagem {
+            display: none;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 8px;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        .mensagem.erro {
+            background: #fff0f0;
+            color: #9b1c1c;
+            border: 1px solid #f3b5b5;
+        }
+
         footer {
             text-align: center;
             padding: 30px 20px;
-            color: #667085;
+            color: white;
             font-size: 13px;
-        }
-
-        #paymentBrick_container {
-            margin-top: 25px;
+            opacity: 0.8;
         }
 
         @media (max-width: 500px) {
+
             .topo h1 {
                 font-size: 24px;
             }
 
             .card {
                 padding: 22px;
+            }
+
+            .valores {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .opcoes-pagamento {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            #pixQrCode {
+                width: 210px;
+                height: 210px;
             }
         }
     </style>
@@ -178,6 +353,7 @@
 
     </header>
 
+
     <main class="container">
 
         <div class="card">
@@ -191,6 +367,11 @@
                 de um Desbravador no Campori DSA 2027 em Barretos.
             </p>
 
+
+            <!-- ================================
+                 VALOR
+            ================================= -->
+
             <label class="valor-label">
                 Quanto você deseja contribuir?
             </label>
@@ -203,6 +384,7 @@
                 step="0.01"
                 placeholder="R$ 0,00"
             >
+
 
             <div class="valores">
 
@@ -256,6 +438,11 @@
 
             </div>
 
+
+            <!-- ================================
+                 DADOS DO PADRINHO
+            ================================= -->
+
             <div class="campo">
 
                 <label for="nome">
@@ -269,6 +456,7 @@
                 >
 
             </div>
+
 
             <div class="campo">
 
@@ -284,7 +472,108 @@
 
             </div>
 
+
+            <!-- ================================
+                 ESCOLHA DO PAGAMENTO
+            ================================= -->
+
+            <div class="titulo-pagamento">
+                Escolha a forma de pagamento
+            </div>
+
+
+            <div class="opcoes-pagamento">
+
+                <button
+                    type="button"
+                    id="btnPix"
+                    class="opcao-pagamento ativo"
+                    onclick="selecionarPagamento('pix')"
+                >
+                    <span class="icone">⚡</span>
+                    PIX
+                </button>
+
+
+                <button
+                    type="button"
+                    id="btnCartao"
+                    class="opcao-pagamento"
+                    onclick="selecionarPagamento('cartao')"
+                >
+                    <span class="icone">💳</span>
+                    Cartão
+                </button>
+
+            </div>
+
+
+            <!-- ================================
+                 PIX
+            ================================= -->
+
+            <div id="pixContainer">
+
+                <h3>
+                    Pagamento via PIX
+                </h3>
+
+                <p class="pix-descricao">
+                    Escaneie o QR Code pelo aplicativo do seu banco
+                    ou copie o código PIX abaixo.
+                </p>
+
+                <div class="pix-valor">
+                    R$ <span id="pixValor">0,00</span>
+                </div>
+
+                <img
+                    id="pixQrCode"
+                    src=""
+                    alt="QR Code PIX"
+                >
+
+                <div class="pix-codigo-label">
+                    PIX Copia e Cola
+                </div>
+
+                <textarea
+                    id="pixCodigo"
+                    readonly
+                    placeholder="O código PIX aparecerá aqui."
+                ></textarea>
+
+                <button
+                    type="button"
+                    class="btn-copiar"
+                    onclick="copiarPix()"
+                >
+                    📋 Copiar código PIX
+                </button>
+
+                <button
+                    type="button"
+                    class="btn-novo-pix"
+                    onclick="criarPix()"
+                >
+                    Gerar novo PIX
+                </button>
+
+            </div>
+
+
+            <!-- ================================
+                 PAYMENT BRICK
+            ================================= -->
+
             <div id="paymentBrick_container"></div>
+
+
+            <div
+                id="mensagemErro"
+                class="mensagem erro"
+            ></div>
+
 
             <p class="seguranca">
                 🔒 Pagamento processado com segurança pelo Mercado Pago.
@@ -293,6 +582,7 @@
         </div>
 
     </main>
+
 
     <footer>
         Clube de Desbravadores Guerreiros do Baca |
@@ -310,16 +600,21 @@
     <script>
 
         // ==========================================
-        // CONFIGURAÇÃO
+        // CONFIGURAÇÃO MERCADO PAGO
         // ==========================================
 
-        const publicKey = "APP_USR-f983117b-67e9-403c-a8ee-97ade3d4537f";
+        const publicKey =
+            "APP_USR-f983117b-67e9-403c-a8ee-97ade3d4537f";
 
-        const mp = new MercadoPago(publicKey);
+        const mp =
+            new MercadoPago(publicKey);
 
-        const bricksBuilder = mp.bricks();
+        const bricksBuilder =
+            mp.bricks();
 
         let paymentBrickController = null;
+
+        let formaPagamentoAtual = "pix";
 
 
         // ==========================================
@@ -340,14 +635,475 @@
 
 
         // ==========================================
+        // MOSTRAR ERRO
+        // ==========================================
+
+        function mostrarErro(mensagem) {
+
+            const elemento =
+                document.getElementById("mensagemErro");
+
+            elemento.textContent =
+                mensagem;
+
+            elemento.style.display =
+                "block";
+
+        }
+
+
+        function esconderErro() {
+
+            const elemento =
+                document.getElementById("mensagemErro");
+
+            elemento.style.display =
+                "none";
+
+        }
+
+
+        // ==========================================
         // SELECIONAR VALOR
         // ==========================================
 
         function selecionarValor(valor) {
 
-            document.getElementById("valor").value = valor;
+            document.getElementById("valor").value =
+                valor;
 
-            renderPaymentBrick();
+            esconderErro();
+
+            if (formaPagamentoAtual === "cartao") {
+
+                renderPaymentBrick();
+
+            }
+
+        }
+
+
+        // ==========================================
+        // SELECIONAR FORMA DE PAGAMENTO
+        // ==========================================
+
+        async function selecionarPagamento(tipo) {
+
+            formaPagamentoAtual =
+                tipo;
+
+            esconderErro();
+
+
+            const btnPix =
+                document.getElementById("btnPix");
+
+            const btnCartao =
+                document.getElementById("btnCartao");
+
+            const pixContainer =
+                document.getElementById("pixContainer");
+
+            const brickContainer =
+                document.getElementById("paymentBrick_container");
+
+
+            btnPix.classList.remove("ativo");
+
+            btnCartao.classList.remove("ativo");
+
+
+            if (tipo === "pix") {
+
+                btnPix.classList.add("ativo");
+
+                pixContainer.style.display =
+                    "block";
+
+                brickContainer.style.display =
+                    "none";
+
+
+                if (paymentBrickController) {
+
+                    try {
+
+                        await paymentBrickController.unmount();
+
+                    } catch (erro) {
+
+                        console.warn(
+                            "Erro ao desmontar Brick:",
+                            erro
+                        );
+
+                    }
+
+                    paymentBrickController =
+                        null;
+
+                }
+
+
+                return;
+
+            }
+
+
+            if (tipo === "cartao") {
+
+                btnCartao.classList.add("ativo");
+
+                pixContainer.style.display =
+                    "none";
+
+                brickContainer.style.display =
+                    "block";
+
+
+                renderPaymentBrick();
+
+            }
+
+        }
+
+
+        // ==========================================
+        // CRIAR PIX
+        // ==========================================
+
+        async function criarPix() {
+
+            esconderErro();
+
+
+            const nome =
+                document
+                    .getElementById("nome")
+                    .value
+                    .trim();
+
+
+            const email =
+                document
+                    .getElementById("email")
+                    .value
+                    .trim();
+
+
+            const valor =
+                Number(
+                    document
+                        .getElementById("valor")
+                        .value
+                );
+
+
+            // ==========================================
+            // VALIDAÇÕES
+            // ==========================================
+
+            if (!valor || valor <= 0) {
+
+                mostrarErro(
+                    "Informe um valor válido para o apadrinhamento."
+                );
+
+                return;
+
+            }
+
+
+            if (!nome) {
+
+                mostrarErro(
+                    "Informe seu nome."
+                );
+
+                document
+                    .getElementById("nome")
+                    .focus();
+
+                return;
+
+            }
+
+
+            if (!email) {
+
+                mostrarErro(
+                    "Informe seu e-mail."
+                );
+
+                document
+                    .getElementById("email")
+                    .focus();
+
+                return;
+
+            }
+
+
+            const pixContainer =
+                document.getElementById("pixContainer");
+
+
+            pixContainer.style.display =
+                "block";
+
+
+            const qr =
+                document.getElementById("pixQrCode");
+
+            const codigo =
+                document.getElementById("pixCodigo");
+
+
+            qr.src = "";
+
+            codigo.value =
+                "Gerando PIX...";
+
+
+            try {
+
+                console.log(
+                    "Criando PIX...",
+                    {
+                        valor,
+                        nome,
+                        email
+                    }
+                );
+
+
+                const resposta =
+                    await fetch(
+                        "/api/criar-pix",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify({
+
+                                    transaction_amount:
+                                        valor,
+
+                                    nome:
+                                        nome,
+
+                                    email:
+                                        email
+
+                                })
+                        }
+                    );
+
+
+                const resultado =
+                    await resposta.json();
+
+
+                console.log(
+                    "Resposta criação PIX:",
+                    resultado
+                );
+
+
+                if (!resposta.ok) {
+
+                    throw new Error(
+                        resultado.erro ||
+                        resultado.mensagem ||
+                        "Não foi possível criar o PIX."
+                    );
+
+                }
+
+
+                // ==========================================
+                // LOCALIZAR DADOS DO PIX
+                // ==========================================
+
+                let dadosPix =
+                    resultado;
+
+
+                if (resultado.pagamento) {
+
+                    dadosPix =
+                        resultado.pagamento;
+
+                }
+
+
+                const qrBase64 =
+                    dadosPix
+                        ?.point_of_interaction
+                        ?.transaction_data
+                        ?.qr_code_base64;
+
+
+                const qrCode =
+                    dadosPix
+                        ?.point_of_interaction
+                        ?.transaction_data
+                        ?.qr_code;
+
+
+                if (!qrBase64) {
+
+                    console.error(
+                        "Resposta sem qr_code_base64:",
+                        resultado
+                    );
+
+                    throw new Error(
+                        "O Mercado Pago criou o pagamento, mas não retornou o QR Code."
+                    );
+
+                }
+
+
+                // ==========================================
+                // MOSTRAR QR CODE
+                // ==========================================
+
+                qr.src =
+                    "data:image/png;base64," +
+                    qrBase64;
+
+
+                // ==========================================
+                // MOSTRAR CÓDIGO PIX
+                // ==========================================
+
+                codigo.value =
+                    qrCode || "";
+
+
+                document
+                    .getElementById("pixValor")
+                    .textContent =
+                    formatarValor(valor);
+
+
+                console.log(
+                    "PIX criado com sucesso."
+                );
+
+
+            } catch (erro) {
+
+                console.error(
+                    "Erro ao criar PIX:",
+                    erro
+                );
+
+
+                codigo.value = "";
+
+
+                mostrarErro(
+                    erro.message ||
+                    "Não foi possível gerar o PIX. Tente novamente."
+                );
+
+            }
+
+        }
+
+
+        // ==========================================
+        // COPIAR PIX
+        // ==========================================
+
+        async function copiarPix() {
+
+            const codigo =
+                document
+                    .getElementById("pixCodigo")
+                    .value;
+
+
+            if (!codigo) {
+
+                mostrarErro(
+                    "O código PIX ainda não foi gerado."
+                );
+
+                return;
+
+            }
+
+
+            try {
+
+                await navigator.clipboard.writeText(
+                    codigo
+                );
+
+
+                const botao =
+                    document.querySelector(
+                        ".btn-copiar"
+                    );
+
+
+                const textoOriginal =
+                    botao.innerHTML;
+
+
+                botao.innerHTML =
+                    "✅ Código PIX copiado!";
+
+
+                setTimeout(
+                    () => {
+
+                        botao.innerHTML =
+                            textoOriginal;
+
+                    },
+                    2500
+                );
+
+
+            } catch (erro) {
+
+                console.error(
+                    "Erro ao copiar PIX:",
+                    erro
+                );
+
+
+                // Fallback para navegadores antigos
+
+                const campo =
+                    document.getElementById(
+                        "pixCodigo"
+                    );
+
+
+                campo.focus();
+
+                campo.select();
+
+                document.execCommand(
+                    "copy"
+                );
+
+
+                alert(
+                    "Código PIX copiado."
+                );
+
+            }
 
         }
 
@@ -361,8 +1117,12 @@
             const valorInput =
                 document.getElementById("valor");
 
+
             const valor =
-                Number(valorInput.value);
+                Number(
+                    valorInput.value
+                );
+
 
             if (!valor || valor <= 0) {
 
@@ -371,7 +1131,9 @@
             }
 
 
-            // Remove Brick anterior
+            // ==========================================
+            // REMOVE BRICK ANTERIOR
+            // ==========================================
 
             if (paymentBrickController) {
 
@@ -388,20 +1150,22 @@
 
                 }
 
-                paymentBrickController = null;
+                paymentBrickController =
+                    null;
 
             }
 
 
             // ==========================================
-            // CONFIGURAÇÃO DO PAYMENT BRICK
+            // CONFIGURAÇÃO PAYMENT BRICK
             // ==========================================
 
             const settings = {
 
                 initialization: {
 
-                    amount: valor
+                    amount:
+                        valor
 
                 },
 
@@ -410,13 +1174,14 @@
 
                     paymentMethods: {
 
-                        creditCard: "all",
+                        creditCard:
+                            "all",
 
-                        debitCard: "all",
+                        debitCard:
+                            "all",
 
-                        ticket: "all",
-
-                        
+                        ticket:
+                            "all"
 
                     }
 
@@ -424,7 +1189,6 @@
 
 
                 callbacks: {
-
 
                     // ==========================================
                     // BRICK PRONTO
@@ -557,17 +1321,22 @@
                                 await fetch(
                                     "/api/processar-pagamento",
                                     {
-                                        method: "POST",
+
+                                        method:
+                                            "POST",
 
                                         headers: {
+
                                             "Content-Type":
                                                 "application/json"
+
                                         },
 
                                         body:
                                             JSON.stringify(
                                                 dadosPagamento
                                             )
+
                                     }
                                 );
 
@@ -602,7 +1371,7 @@
 
 
                             // ==========================================
-                            // STATUS DO MERCADO PAGO
+                            // STATUS MERCADO PAGO
                             // ==========================================
 
                             const status =
@@ -741,7 +1510,7 @@
 
 
                     // ==========================================
-                    // ERRO DO PAYMENT BRICK
+                    // ERRO PAYMENT BRICK
                     // ==========================================
 
                     onError: (error) => {
@@ -793,7 +1562,17 @@
                 "change",
                 () => {
 
-                    renderPaymentBrick();
+                    esconderErro();
+
+
+                    if (
+                        formaPagamentoAtual ===
+                        "cartao"
+                    ) {
+
+                        renderPaymentBrick();
+
+                    }
 
                 }
             );
@@ -805,12 +1584,18 @@
 
         document
             .getElementById("valor")
-            .value = 50;
+            .value =
+            50;
 
 
-        renderPaymentBrick();
+        // ==========================================
+        // INICIALIZAÇÃO
+        // ==========================================
+
+        selecionarPagamento("pix");
 
     </script>
 
 </body>
 </html>
+```
