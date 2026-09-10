@@ -2,1830 +2,1370 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Apadrinhe um Desbravador</title>
+  <title>Apadrinhe um Desbravador</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+  <script src="https://sdk.mercadopago.com/js/v2"></script>
 
-        body {
-            font-family: Arial, sans-serif;
-            background: #500202;
-            color: #17202a;
-        }
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-        .topo {
-            background: #000000;
-            color: white;
-            text-align: center;
-            padding: 35px 20px;
-        }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top, #641414 0%, #220606 45%, #080101 100%);
+      color: #fff;
+      min-height: 100vh;
+    }
 
-        .topo h1 {
-            font-size: 30px;
-            margin-bottom: 10px;
-        }
+    .container {
+      width: 100%;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 30px 18px 40px;
+    }
 
-        .topo p {
-            font-size: 16px;
-            opacity: 0.9;
-        }
+    .logo {
+      display: block;
+      width: 130px;
+      max-width: 45%;
+      margin: 0 auto 20px;
+    }
 
-        .brand-logo {
-            width: 100px;
-            height: 100px;
-            object-fit: contain;
-            vertical-align: middle;
-            margin-bottom: 15px;
-        }
+    h1 {
+      text-align: center;
+      font-size: 28px;
+      line-height: 1.15;
+      font-weight: 800;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
 
-        .container {
-            max-width: 600px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
+    .subtitle {
+      text-align: center;
+      color: #ddd;
+      font-size: 15px;
+      line-height: 1.5;
+      margin-bottom: 28px;
+    }
 
-        .card {
-            background: white;
-            border-radius: 16px;
-            padding: 30px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-        }
+    .card {
+      background: rgba(20, 5, 5, 0.92);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 18px;
+      padding: 25px;
+      box-shadow: 0 15px 45px rgba(0,0,0,0.45);
+    }
 
-        .card h2 {
-            text-align: center;
-            color: #071a33;
-            margin-bottom: 10px;
-        }
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
 
-        .descricao {
-            text-align: center;
-            color: #667085;
-            margin-bottom: 30px;
-            line-height: 1.5;
-        }
+    .valor-input {
+      width: 100%;
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid #555;
+      background: #120707;
+      color: #fff;
+      font-size: 20px;
+      font-weight: bold;
+      outline: none;
+      text-align: center;
+    }
 
-        .valor-label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 8px;
-        }
+    .valor-input:focus {
+      border-color: #e33;
+    }
 
-        .valor {
-            width: 100%;
-            padding: 16px;
-            font-size: 24px;
-            text-align: center;
-            border: 2px solid #d0d5dd;
-            border-radius: 10px;
-            outline: none;
-        }
+    .valores {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+      margin-bottom: 25px;
+    }
 
-        .valor:focus {
-            border-color: #d9a441;
-        }
+    .valor-btn {
+      padding: 12px 8px;
+      border-radius: 9px;
+      border: 1px solid #5d2525;
+      background: #260909;
+      color: #fff;
+      cursor: pointer;
+      font-weight: bold;
+      transition: .2s;
+    }
 
-        .valores {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin: 20px 0 30px;
-        }
+    .valor-btn:hover {
+      background: #451010;
+      transform: translateY(-1px);
+    }
 
-        .valor-btn {
-            padding: 12px 5px;
-            border: 1px solid #d0d5dd;
-            background: white;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-        }
+    .valor-btn.ativo {
+      background: #a71919;
+      border-color: #df4545;
+    }
 
-        .valor-btn:hover {
-            border-color: #d9a441;
-            background: #fffaf0;
-        }
+    label {
+      display: block;
+      font-size: 14px;
+      color: #ddd;
+      margin-bottom: 7px;
+      margin-top: 16px;
+    }
 
-        .campo {
-            margin-bottom: 18px;
-        }
+    input[type="text"],
+    input[type="email"] {
+      width: 100%;
+      padding: 14px;
+      border-radius: 9px;
+      border: 1px solid #555;
+      background: #120707;
+      color: #fff;
+      font-size: 15px;
+      outline: none;
+    }
 
-        .campo label {
-            display: block;
-            margin-bottom: 7px;
-            font-weight: bold;
-        }
+    input[type="text"]:focus,
+    input[type="email"]:focus {
+      border-color: #e33;
+    }
 
-        .campo input {
-            width: 100%;
-            padding: 13px;
-            border: 1px solid #d0d5dd;
-            border-radius: 8px;
-            font-size: 16px;
-        }
+    .pagamento-titulo {
+      margin-top: 25px;
+      margin-bottom: 12px;
+      font-size: 16px;
+      font-weight: bold;
+    }
 
-        .titulo-pagamento {
-            font-size: 18px;
-            font-weight: bold;
-            color: #071a33;
-            margin-top: 25px;
-            margin-bottom: 12px;
-        }
+    .opcoes-pagamento {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
 
-        .opcoes-pagamento {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
+    .opcao-pagamento {
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid #555;
+      background: #160707;
+      color: #fff;
+      cursor: pointer;
+      text-align: center;
+      font-weight: bold;
+      transition: .2s;
+    }
 
-        .opcao-pagamento {
-            border: 2px solid #d0d5dd;
-            background: white;
-            border-radius: 10px;
-            padding: 16px 10px;
-            cursor: pointer;
-            text-align: center;
-            font-weight: bold;
-            font-size: 16px;
-            transition: 0.2s;
-        }
+    .opcao-pagamento:hover {
+      border-color: #c33;
+    }
 
-        .opcao-pagamento:hover {
-            border-color: #d9a441;
-            background: #fffaf0;
-        }
+    .opcao-pagamento.ativo {
+      background: #861515;
+      border-color: #e33;
+    }
 
-        .opcao-pagamento.ativo {
-            border-color: #500202;
-            background: #fff5f5;
-        }
+    .metodo-container {
+      margin-top: 18px;
+    }
 
-        .opcao-pagamento .icone {
-            display: block;
-            font-size: 28px;
-            margin-bottom: 7px;
-        }
+    /* =========================
+       ÁREA PIX
+       ========================= */
 
-        #pixContainer {
-            display: none;
-            margin-top: 20px;
-            padding: 20px;
-            border: 1px solid #d0d5dd;
-            border-radius: 12px;
-            background: #fafafa;
-            text-align: center;
-        }
+    #pixContainer {
+      display: none;
+    }
 
-        #pixContainer h3 {
-            color: #071a33;
-            margin-bottom: 8px;
-        }
+    .pix-inicial {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
 
-        .pix-descricao {
-            color: #667085;
-            font-size: 14px;
-            line-height: 1.5;
-            margin-bottom: 15px;
-        }
+    .pix-inicial-icon {
+      font-size: 35px;
+      margin-bottom: 10px;
+    }
 
-        #pixQrCode {
-            width: 240px;
-            height: 240px;
-            object-fit: contain;
-            display: block;
-            margin: 15px auto;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background: white;
-        }
+    .pix-inicial strong {
+      display: block;
+      font-size: 17px;
+      margin-bottom: 7px;
+    }
 
-        .pix-valor {
-            font-size: 22px;
-            font-weight: bold;
-            color: #500202;
-            margin: 10px 0 15px;
-        }
+    .pix-inicial p {
+      color: #bbb;
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 17px;
+    }
 
-        .pix-codigo-label {
-            text-align: left;
-            font-size: 13px;
-            font-weight: bold;
-            margin-bottom: 6px;
-        }
+    .btn-principal {
+      width: 100%;
+      padding: 15px 18px;
+      border: none;
+      border-radius: 10px;
+      background: #b51d1d;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: .2s;
+    }
 
-        #pixCodigo {
-            width: 100%;
-            min-height: 100px;
-            resize: none;
-            padding: 12px;
-            border: 1px solid #d0d5dd;
-            border-radius: 8px;
-            font-size: 12px;
-            line-height: 1.4;
-            background: white;
-        }
+    .btn-principal:hover {
+      background: #d12727;
+      transform: translateY(-1px);
+    }
 
-        .btn-copiar {
-            width: 100%;
-            margin-top: 10px;
-            padding: 14px;
-            border: none;
-            border-radius: 8px;
-            background: #500202;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+    .btn-principal:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+      transform: none;
+    }
 
-        .btn-copiar:hover {
-            background: #720404;
-        }
+    .pix-gerado {
+      display: none;
+    }
 
-        .btn-novo-pix {
-            width: 100%;
-            margin-top: 10px;
-            padding: 12px;
-            border: 1px solid #d0d5dd;
-            border-radius: 8px;
-            background: white;
-            color: #17202a;
-            font-size: 14px;
-            cursor: pointer;
-        }
+    .pix-valor {
+      text-align: center;
+      font-size: 17px;
+      margin-bottom: 18px;
+      color: #ddd;
+    }
 
-        /* STATUS DO PAGAMENTO */
+    .pix-valor strong {
+      color: #fff;
+      font-size: 20px;
+    }
 
-        #statusPagamento {
-            display: none;
-            margin-top: 18px;
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            font-weight: bold;
-            line-height: 1.5;
-        }
+    .qr-area {
+      display: flex;
+      justify-content: center;
+      margin: 10px 0 18px;
+    }
 
-        #statusPagamento.aguardando {
-            display: block;
-            background: #fff8e6;
-            border: 1px solid #ead08a;
-            color: #795b00;
-        }
+    #pixQrCode {
+      width: 230px;
+      height: 230px;
+      object-fit: contain;
+      background: #fff;
+      padding: 10px;
+      border-radius: 12px;
+    }
 
-        #statusPagamento.aprovado {
-            display: block;
-            background: #edf9f0;
-            border: 1px solid #a8d8b2;
-            color: #176b2c;
-        }
+    .pix-instrucoes {
+      text-align: center;
+      color: #bbb;
+      font-size: 13px;
+      line-height: 1.5;
+      margin-bottom: 15px;
+    }
 
-        #statusPagamento.erro {
-            display: block;
-            background: #fff0f0;
-            border: 1px solid #f3b5b5;
-            color: #9b1c1c;
-        }
+    .pix-codigo {
+      width: 100%;
+      min-height: 95px;
+      resize: none;
+      padding: 12px;
+      border-radius: 9px;
+      border: 1px solid #555;
+      background: #0d0303;
+      color: #ddd;
+      font-size: 12px;
+      line-height: 1.4;
+      margin-bottom: 10px;
+    }
 
-        .status-id {
-            display: block;
-            margin-top: 6px;
-            font-size: 11px;
-            font-weight: normal;
-            opacity: 0.7;
-        }
+    .btn-copiar {
+      width: 100%;
+      padding: 15px 18px;
+      border-radius: 10px;
+      border: 1px solid #b51d1d;
+      background: #250808;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: .2s;
+      margin-bottom: 10px;
+    }
 
-        #paymentBrick_container {
-            margin-top: 20px;
-        }
+    .btn-copiar:hover {
+      background: #451010;
+    }
 
-        .seguranca {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 13px;
-            color: #667085;
-        }
+    .btn-novo-pix {
+      width: 100%;
+      padding: 15px 18px;
+      border-radius: 10px;
+      border: 1px solid #555;
+      background: #160707;
+      color: #ddd;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: .2s;
+    }
 
-        .mensagem {
-            display: none;
-            padding: 15px;
-            margin-top: 15px;
-            border-radius: 8px;
-            text-align: center;
-            line-height: 1.5;
-        }
+    .btn-novo-pix:hover {
+      background: #280b0b;
+      border-color: #888;
+    }
 
-        .mensagem.erro {
-            background: #fff0f0;
-            color: #9b1c1c;
-            border: 1px solid #f3b5b5;
-        }
+    /* =========================
+       STATUS DO PAGAMENTO
+       ========================= */
 
-        footer {
-            text-align: center;
-            padding: 30px 20px;
-            color: white;
-            font-size: 13px;
-            opacity: 0.8;
-        }
+    #statusPagamento {
+      display: none;
+      margin-top: 15px;
+      padding: 14px;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 14px;
+      line-height: 1.4;
+    }
 
-        @media (max-width: 500px) {
+    #statusPagamento.aguardando {
+      display: block;
+      background: rgba(255, 180, 0, 0.08);
+      border: 1px solid rgba(255, 180, 0, 0.25);
+      color: #ffd36a;
+    }
 
-            .topo h1 {
-                font-size: 24px;
-            }
+    #statusPagamento.aprovado {
+      display: block;
+      background: rgba(0, 180, 80, 0.10);
+      border: 1px solid rgba(0, 220, 100, 0.30);
+      color: #72f0a5;
+      font-weight: bold;
+    }
 
-            .card {
-                padding: 22px;
-            }
+    #statusPagamento.erro {
+      display: block;
+      background: rgba(220, 0, 0, 0.10);
+      border: 1px solid rgba(255, 70, 70, 0.30);
+      color: #ff8b8b;
+    }
 
-            .valores {
-                grid-template-columns: repeat(2, 1fr);
-            }
+    /* =========================
+       CARTÃO
+       ========================= */
 
-            .opcoes-pagamento {
-                grid-template-columns: 1fr 1fr;
-            }
+    #cartaoContainer {
+      display: none;
+    }
 
-            #pixQrCode {
-                width: 210px;
-                height: 210px;
-            }
-        }
-    </style>
+    #paymentBrick_container {
+      margin-top: 10px;
+    }
+
+    /* =========================
+       ERRO
+       ========================= */
+
+    #erro {
+      display: none;
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 10px;
+      background: rgba(180, 0, 0, .12);
+      border: 1px solid rgba(255, 70, 70, .35);
+      color: #ff9c9c;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .seguranca {
+      text-align: center;
+      color: #999;
+      font-size: 12px;
+      line-height: 1.5;
+      margin-top: 20px;
+    }
+
+    footer {
+      text-align: center;
+      color: #777;
+      font-size: 12px;
+      margin-top: 25px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 520px) {
+      .container {
+        padding: 22px 12px 30px;
+      }
+
+      .card {
+        padding: 18px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      .valores {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      #pixQrCode {
+        width: 210px;
+        height: 210px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<header class="topo">
+  <div class="container">
 
-    <a class="brand" href="#">
-        <img
-            src="assets/logo.png"
-            alt="Guerreiros do Baca"
-            class="brand-logo"
-        >
-    </a>
+    <img
+      src="assets/logo.png"
+      alt="Logo"
+      class="logo"
+    >
 
     <h1>APADRINHE UM DESBRAVADOR</h1>
 
-    <p>
-        Uma oportunidade pode mudar uma vida inteira.
+    <p class="subtitle">
+      Ajude um Desbravador a viver uma experiência inesquecível
+      no Campori Barretos 2027.
     </p>
-
-</header>
-
-
-<main class="container">
 
     <div class="card">
 
-        <h2>
-            Quero fazer parte dessa história
-        </h2>
+      <div class="section-title">
+        Escolha o valor da sua contribuição
+      </div>
 
-        <p class="descricao">
-            Escolha um valor para contribuir com a participação
-            de um Desbravador no Campori DSA 2027 em Barretos.
-        </p>
+      <input
+        type="number"
+        id="valor"
+        class="valor-input"
+        min="50"
+        step="0.01"
+        value="50"
+        placeholder="Digite o valor"
+      >
 
+      <div class="valores">
+        <button class="valor-btn ativo" onclick="selecionarValor(50, this)">R$ 50</button>
+        <button class="valor-btn" onclick="selecionarValor(100, this)">R$ 100</button>
+        <button class="valor-btn" onclick="selecionarValor(200, this)">R$ 200</button>
+        <button class="valor-btn" onclick="selecionarValor(500, this)">R$ 500</button>
+        <button class="valor-btn" onclick="selecionarValor(1000, this)">R$ 1.000</button>
+        <button class="valor-btn" onclick="selecionarValor(2000, this)">R$ 2.000</button>
+      </div>
 
-        <label class="valor-label">
-            Quanto você deseja contribuir?
-        </label>
+      <label for="nome">Seu nome</label>
 
-        <input
-            type="number"
-            id="valor"
-            class="valor"
-            min="1"
-            step="0.01"
-            placeholder="R$ 0,00"
+      <input
+        type="text"
+        id="nome"
+        placeholder="Digite seu nome"
+      >
+
+      <label for="email">Seu e-mail</label>
+
+      <input
+        type="email"
+        id="email"
+        placeholder="Digite seu e-mail"
+      >
+
+      <div class="pagamento-titulo">
+        Escolha a forma de pagamento
+      </div>
+
+      <div class="opcoes-pagamento">
+
+        <button
+          id="opcaoPix"
+          class="opcao-pagamento ativo"
+          onclick="selecionarPagamento('pix')"
         >
+          💠 PIX
+        </button>
 
+        <button
+          id="opcaoCartao"
+          class="opcao-pagamento"
+          onclick="selecionarPagamento('cartao')"
+        >
+          💳 Cartão
+        </button>
 
-        <div class="valores">
+      </div>
 
-            <button type="button" class="valor-btn"
-                onclick="selecionarValor(50)">
-                R$ 50
-            </button>
+      <!-- =========================
+           PIX
+           ========================= -->
 
-            <button type="button" class="valor-btn"
-                onclick="selecionarValor(100)">
-                R$ 100
-            </button>
+      <div id="pixContainer" class="metodo-container">
 
-            <button type="button" class="valor-btn"
-                onclick="selecionarValor(200)">
-                R$ 200
-            </button>
+        <!-- Aparece antes de gerar o PIX -->
+        <div id="pixInicial" class="pix-inicial">
 
-            <button type="button" class="valor-btn"
-                onclick="selecionarValor(500)">
-                R$ 500
-            </button>
+          <div class="pix-inicial-icon">
+            💠
+          </div>
 
-            <button type="button" class="valor-btn"
-                onclick="selecionarValor(1000)">
-                R$ 1.000
-            </button>
+          <strong>Pagamento via PIX</strong>
 
-            <button type="button" class="valor-btn"
-                onclick="selecionarValor(2000)">
-                R$ 2.000
-            </button>
+          <p>
+            Clique no botão abaixo para gerar seu QR Code
+            e o código PIX Copia e Cola.
+          </p>
 
-        </div>
-
-
-        <div class="campo">
-
-            <label for="nome">
-                Seu nome
-            </label>
-
-            <input
-                type="text"
-                id="nome"
-                placeholder="Digite seu nome"
-            >
+          <button
+            id="btnGerarPix"
+            class="btn-principal"
+            onclick="criarPix()"
+          >
+            Gerar PIX
+          </button>
 
         </div>
 
+        <!-- Aparece somente depois que o PIX for gerado -->
+        <div id="pixGerado" class="pix-gerado">
 
-        <div class="campo">
+          <div class="pix-valor">
+            Valor da contribuição:
+            <strong id="pixValor">R$ 0,00</strong>
+          </div>
 
-            <label for="email">
-                Seu e-mail
-            </label>
-
-            <input
-                type="email"
-                id="email"
-                placeholder="Digite seu e-mail"
-            >
-
-        </div>
-
-
-        <div class="titulo-pagamento">
-            Escolha a forma de pagamento
-        </div>
-
-
-        <div class="opcoes-pagamento">
-
-            <button
-                type="button"
-                id="btnPix"
-                class="opcao-pagamento ativo"
-                onclick="selecionarPagamento('pix')"
-            >
-                <span class="icone">⚡</span>
-                PIX
-            </button>
-
-
-            <button
-                type="button"
-                id="btnCartao"
-                class="opcao-pagamento"
-                onclick="selecionarPagamento('cartao')"
-            >
-                <span class="icone">💳</span>
-                Cartão
-            </button>
-
-        </div>
-
-
-        <div id="pixContainer">
-
-            <h3>
-                Pagamento via PIX
-            </h3>
-
-            <p class="pix-descricao">
-                Escaneie o QR Code pelo aplicativo do seu banco
-                ou copie o código PIX abaixo.
-            </p>
-
-            <div class="pix-valor">
-                R$ <span id="pixValor">0,00</span>
-            </div>
-
+          <div class="qr-area">
             <img
-                id="pixQrCode"
-                src=""
-                alt="QR Code PIX"
+              id="pixQrCode"
+              src=""
+              alt="QR Code PIX"
             >
+          </div>
 
-            <div class="pix-codigo-label">
-                PIX Copia e Cola
-            </div>
+          <p class="pix-instrucoes">
+            Aponte a câmera do aplicativo do seu banco para
+            o QR Code ou utilize o código Copia e Cola abaixo.
+          </p>
 
-            <textarea
-                id="pixCodigo"
-                readonly
-                placeholder="O código PIX aparecerá aqui."
-            ></textarea>
+          <textarea
+            id="pixCodigo"
+            class="pix-codigo"
+            readonly
+            placeholder="Código PIX Copia e Cola"
+          ></textarea>
 
-            <button
-                type="button"
-                class="btn-copiar"
-                onclick="copiarPix()"
-            >
-                📋 Copiar código PIX
-            </button>
+          <button
+            class="btn-copiar"
+            onclick="copiarPix()"
+          >
+            📋 Copiar PIX
+          </button>
 
-            <button
-                type="button"
-                class="btn-novo-pix"
-                onclick="criarPix()"
-            >
-                Gerar novo PIX
-            </button>
+          <button
+            id="btnNovoPix"
+            class="btn-novo-pix"
+            onclick="criarPix()"
+          >
+            Gerar novo PIX
+          </button>
 
-
-            <!-- STATUS DO PAGAMENTO -->
-
-            <div id="statusPagamento"></div>
+          <div id="statusPagamento"></div>
 
         </div>
 
+      </div>
+
+      <!-- =========================
+           CARTÃO
+           ========================= -->
+
+      <div id="cartaoContainer" class="metodo-container">
 
         <div id="paymentBrick_container"></div>
 
+      </div>
 
-        <div id="mensagemErro" class="mensagem erro"></div>
+      <div id="erro"></div>
 
-
-        <p class="seguranca">
-            🔒 Pagamento processado com segurança pelo Mercado Pago.
-        </p>
+      <div class="seguranca">
+        🔒 Pagamento processado com segurança pelo Mercado Pago.
+      </div>
 
     </div>
 
-</main>
+    <footer>
+      Apadrinhe um Desbravador<br>
+      Clube de Desbravadores Guerreiros do Baca<br>
+      IASD Bacacheri
+    </footer>
 
+  </div>
 
-<footer>
-    Clube de Desbravadores Guerreiros do Baca |
-    DSA Barretos • 2027
-</footer>
+  <script>
 
+    /* ==========================================
+       CONFIGURAÇÕES
+       ========================================== */
 
-<script src="https://sdk.mercadopago.com/js/v2"></script>
+    const MP_PUBLIC_KEY =
+      "APP_USR-f983117b-67e9-403c-a8ee-97ade3d4537f";
 
-
-<script>
-
-    // ==========================================
-    // CONFIGURAÇÃO MERCADO PAGO
-    // ==========================================
-
-    const publicKey =
-        "APP_USR-f983117b-67e9-403c-a8ee-97ade3d4537f";
-
-    const mp =
-        new MercadoPago(publicKey);
-
-    const bricksBuilder =
-        mp.bricks();
-
-    let paymentBrickController = null;
-
-    let formaPagamentoAtual = "pix";
-
-    // ==========================================
-    // CONTROLE DO PAGAMENTO
-    // ==========================================
+    const mp = new MercadoPago(MP_PUBLIC_KEY);
 
     let pagamentoAtualId = null;
-
     let monitoramentoPagamento = null;
+    let paymentBrick = null;
 
-
-    // ==========================================
-    // FORMATAR VALOR
-    // ==========================================
+    /* ==========================================
+       FORMATAÇÃO
+       ========================================== */
 
     function formatarValor(valor) {
 
-        return Number(valor).toLocaleString(
-            "pt-BR",
-            {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }
-        );
+      return Number(valor).toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+      });
 
     }
 
+    /* ==========================================
+       VALORES
+       ========================================== */
 
-    // ==========================================
-    // MOSTRAR ERRO
-    // ==========================================
+    function selecionarValor(valor, botao) {
+
+      document.getElementById("valor").value = valor;
+
+      document.querySelectorAll(".valor-btn").forEach(btn => {
+        btn.classList.remove("ativo");
+      });
+
+      botao.classList.add("ativo");
+
+    }
+
+    /* ==========================================
+       PAGAMENTO
+       ========================================== */
+
+    function selecionarPagamento(tipo) {
+
+      const pixContainer =
+        document.getElementById("pixContainer");
+
+      const cartaoContainer =
+        document.getElementById("cartaoContainer");
+
+      const opcaoPix =
+        document.getElementById("opcaoPix");
+
+      const opcaoCartao =
+        document.getElementById("opcaoCartao");
+
+      esconderErro();
+
+      if (tipo === "pix") {
+
+        opcaoPix.classList.add("ativo");
+        opcaoCartao.classList.remove("ativo");
+
+        pixContainer.style.display = "block";
+        cartaoContainer.style.display = "none";
+
+      } else {
+
+        opcaoPix.classList.remove("ativo");
+        opcaoCartao.classList.add("ativo");
+
+        pixContainer.style.display = "none";
+        cartaoContainer.style.display = "block";
+
+        renderPaymentBrick();
+
+      }
+
+    }
+
+    /* ==========================================
+       ERROS
+       ========================================== */
 
     function mostrarErro(mensagem) {
 
-        const elemento =
-            document.getElementById("mensagemErro");
+      const erro =
+        document.getElementById("erro");
 
-        elemento.textContent =
-            mensagem;
-
-        elemento.style.display =
-            "block";
+      erro.textContent = mensagem;
+      erro.style.display = "block";
 
     }
-
 
     function esconderErro() {
 
-        const elemento =
-            document.getElementById("mensagemErro");
+      const erro =
+        document.getElementById("erro");
 
-        elemento.style.display =
-            "none";
+      erro.textContent = "";
+      erro.style.display = "none";
 
     }
 
+    /* ==========================================
+       STATUS DO PAGAMENTO
+       ========================================== */
 
-    // ==========================================
-    // STATUS DO PAGAMENTO
-    // ==========================================
+    function mostrarStatusPagamento(tipo, mensagem) {
 
-    function mostrarStatusPagamento(
-        tipo,
-        mensagem,
-        pagamentoId = null
-    ) {
+      const elemento =
+        document.getElementById("statusPagamento");
 
-        const elemento =
-            document.getElementById(
-                "statusPagamento"
-            );
+      elemento.className = "";
 
-        elemento.className =
-            "";
-
+      if (tipo) {
         elemento.classList.add(tipo);
+      }
 
-        elemento.innerHTML =
-            mensagem;
-
-        if (pagamentoId) {
-
-            elemento.innerHTML +=
-                `<span class="status-id">
-                    ID do pagamento: ${pagamentoId}
-                </span>`;
-
-        }
+      elemento.textContent = mensagem;
 
     }
-
-
-    // ==========================================
-    // PARAR MONITORAMENTO
-    // ==========================================
 
     function pararMonitoramentoPagamento() {
 
-        if (monitoramentoPagamento) {
+      if (monitoramentoPagamento) {
 
-            clearInterval(
-                monitoramentoPagamento
-            );
+        clearInterval(monitoramentoPagamento);
 
-            monitoramentoPagamento =
-                null;
+        monitoramentoPagamento = null;
 
-        }
+      }
 
     }
 
-
-    // ==========================================
-    // MONITORAR PAGAMENTO
-    // ==========================================
+    /* ==========================================
+       CONSULTA PAGAMENTO
+       ========================================== */
 
     async function verificarPagamento() {
 
-        if (!pagamentoAtualId) {
-            return;
-        }
+      if (!pagamentoAtualId) {
+        return;
+      }
 
-        try {
+      try {
 
-            const resposta =
-                await fetch(
-                    "/api/pagamento/" +
-                    pagamentoAtualId
-                );
-
-            const dados =
-                await resposta.json();
-
-            console.log(
-                "Status atual do pagamento:",
-                dados
-            );
-
-
-            if (!resposta.ok || !dados.sucesso) {
-
-                console.warn(
-                    "Não foi possível consultar o pagamento."
-                );
-
-                return;
-
-            }
-
-
-            const status =
-                dados.status;
-
-
-            // ==========================================
-            // APROVADO
-            // ==========================================
-
-            if (status === "approved") {
-
-                pararMonitoramentoPagamento();
-
-                mostrarStatusPagamento(
-                    "aprovado",
-                    "✅ <strong>Pagamento confirmado!</strong><br>" +
-                    "Muito obrigado por fazer parte dessa história.",
-                    pagamentoAtualId
-                );
-
-                console.log(
-                    "PAGAMENTO CONFIRMADO!",
-                    pagamentoAtualId
-                );
-
-                return;
-
-            }
-
-
-            // ==========================================
-            // RECUSADO
-            // ==========================================
-
-            if (status === "rejected") {
-
-                pararMonitoramentoPagamento();
-
-                mostrarStatusPagamento(
-                    "erro",
-                    "❌ <strong>Pagamento recusado.</strong><br>" +
-                    "Você pode tentar novamente com outra forma de pagamento.",
-                    pagamentoAtualId
-                );
-
-                return;
-
-            }
-
-
-            // ==========================================
-            // CANCELADO
-            // ==========================================
-
-            if (status === "cancelled") {
-
-                pararMonitoramentoPagamento();
-
-                mostrarStatusPagamento(
-                    "erro",
-                    "❌ <strong>Pagamento cancelado.</strong><br>" +
-                    "Gere um novo PIX para tentar novamente.",
-                    pagamentoAtualId
-                );
-
-                return;
-
-            }
-
-
-            // ==========================================
-            // PENDENTE / EM ANÁLISE
-            // ==========================================
-
-            mostrarStatusPagamento(
-                "aguardando",
-                "⏳ <strong>Aguardando pagamento...</strong><br>" +
-                "Assim que o Mercado Pago confirmar o pagamento, " +
-                "esta mensagem será atualizada automaticamente.",
-                pagamentoAtualId
-            );
-
-
-        } catch (erro) {
-
-            console.error(
-                "Erro ao verificar pagamento:",
-                erro
-            );
-
-        }
-
-    }
-
-
-    // ==========================================
-    // INICIAR MONITORAMENTO
-    // ==========================================
-
-    function iniciarMonitoramentoPagamento(
-        pagamentoId
-    ) {
-
-        pararMonitoramentoPagamento();
-
-        pagamentoAtualId =
-            pagamentoId;
-
-        mostrarStatusPagamento(
-            "aguardando",
-            "⏳ <strong>Aguardando pagamento...</strong><br>" +
-            "Estamos aguardando a confirmação do Mercado Pago.",
-            pagamentoId
+        const resposta = await fetch(
+          "/api/pagamento/" +
+          encodeURIComponent(pagamentoAtualId)
         );
 
+        const dados = await resposta.json();
 
-        // Consulta imediatamente
+        console.log(
+          "Status atual do pagamento:",
+          dados
+        );
 
-        verificarPagamento();
+        if (!dados.sucesso) {
+          return;
+        }
 
-
-        // Depois consulta a cada 4 segundos
-
-        monitoramentoPagamento =
-            setInterval(
-                verificarPagamento,
-                4000
-            );
-
-    }
-
-
-    // ==========================================
-    // SELECIONAR VALOR
-    // ==========================================
-
-    function selecionarValor(valor) {
-
-        document
-            .getElementById("valor")
-            .value = valor;
-
-        esconderErro();
+        const status =
+          String(dados.status || "").toLowerCase();
 
         if (
-            formaPagamentoAtual ===
-            "cartao"
+          dados.aprovado === true ||
+          status === "approved"
         ) {
 
-            renderPaymentBrick();
+          pararMonitoramentoPagamento();
+
+          mostrarStatusPagamento(
+            "aprovado",
+            "✅ Pagamento confirmado! Muito obrigado por apadrinhar um Desbravador."
+          );
+
+          return;
 
         }
+
+        if (
+          status === "rejected" ||
+          status === "cancelled"
+        ) {
+
+          pararMonitoramentoPagamento();
+
+          mostrarStatusPagamento(
+            "erro",
+            "❌ O pagamento não foi aprovado. Se desejar, você pode gerar um novo PIX."
+          );
+
+          return;
+
+        }
+
+        mostrarStatusPagamento(
+          "aguardando",
+          "⏳ Aguardando a confirmação do pagamento..."
+        );
+
+      } catch (erro) {
+
+        console.error(
+          "Erro ao consultar pagamento:",
+          erro
+        );
+
+      }
 
     }
 
+    /* ==========================================
+       INICIAR MONITORAMENTO
+       ========================================== */
 
-    // ==========================================
-    // SELECIONAR PAGAMENTO
-    // ==========================================
+    function iniciarMonitoramentoPagamento(pagamentoId) {
 
-    async function selecionarPagamento(tipo) {
+      pararMonitoramentoPagamento();
 
-        formaPagamentoAtual =
-            tipo;
+      pagamentoAtualId = pagamentoId;
 
-        esconderErro();
+      mostrarStatusPagamento(
+        "aguardando",
+        "⏳ Aguardando a confirmação do pagamento..."
+      );
 
+      verificarPagamento();
 
-        const btnPix =
-            document.getElementById("btnPix");
-
-        const btnCartao =
-            document.getElementById("btnCartao");
-
-        const pixContainer =
-            document.getElementById("pixContainer");
-
-        const brickContainer =
-            document.getElementById(
-                "paymentBrick_container"
-            );
-
-
-        btnPix.classList.remove("ativo");
-
-        btnCartao.classList.remove("ativo");
-
-
-        if (tipo === "pix") {
-
-            btnPix.classList.add("ativo");
-
-            pixContainer.style.display =
-                "block";
-
-            brickContainer.style.display =
-                "none";
-
-
-            if (paymentBrickController) {
-
-                try {
-
-                    await paymentBrickController
-                        .unmount();
-
-                } catch (erro) {
-
-                    console.warn(
-                        "Erro ao desmontar Brick:",
-                        erro
-                    );
-
-                }
-
-                paymentBrickController =
-                    null;
-
-            }
-
-            return;
-
-        }
-
-
-        if (tipo === "cartao") {
-
-            btnCartao.classList.add("ativo");
-
-            pixContainer.style.display =
-                "none";
-
-            brickContainer.style.display =
-                "block";
-
-
-            renderPaymentBrick();
-
-        }
+      monitoramentoPagamento =
+        setInterval(
+          verificarPagamento,
+          4000
+        );
 
     }
 
-
-    // ==========================================
-    // CRIAR PIX
-    // ==========================================
+    /* ==========================================
+       CRIAR PIX
+       ========================================== */
 
     async function criarPix() {
 
-        esconderErro();
+      esconderErro();
+
+      const valor =
+        Number(
+          document.getElementById("valor").value
+        );
+
+      const nome =
+        document.getElementById("nome").value.trim();
+
+      const email =
+        document.getElementById("email").value.trim();
+
+      if (!valor || valor < 50) {
+
+        mostrarErro(
+          "Informe um valor de contribuição de pelo menos R$ 50,00."
+        );
+
+        return;
+
+      }
+
+      if (!nome) {
+
+        mostrarErro(
+          "Informe seu nome."
+        );
+
+        document.getElementById("nome").focus();
+
+        return;
+
+      }
+
+      if (!email) {
+
+        mostrarErro(
+          "Informe seu e-mail."
+        );
+
+        document.getElementById("email").focus();
+
+        return;
+
+      }
+
+      const btnGerar =
+        document.getElementById("btnGerarPix");
+
+      const btnNovo =
+        document.getElementById("btnNovoPix");
+
+      const textoOriginalGerar =
+        btnGerar.textContent;
+
+      const textoOriginalNovo =
+        btnNovo.textContent;
+
+      btnGerar.disabled = true;
+      btnNovo.disabled = true;
+
+      btnGerar.textContent =
+        "Gerando PIX...";
+
+      btnNovo.textContent =
+        "Gerando PIX...";
+
+      try {
 
         pararMonitoramentoPagamento();
 
-        pagamentoAtualId = null;
+        const resposta =
+          await fetch(
+            "/api/criar-pix",
+            {
+              method: "POST",
 
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
 
-        const nome =
-            document
-                .getElementById("nome")
-                .value
-                .trim();
+              body: JSON.stringify({
+                transaction_amount: valor,
+                nome: nome,
+                email: email
+              })
+            }
+          );
 
+        const resultado =
+          await resposta.json();
 
-        const email =
-            document
-                .getElementById("email")
-                .value
-                .trim();
+        if (
+          !resposta.ok ||
+          !resultado.sucesso
+        ) {
 
-
-        const valor =
-            Number(
-                document
-                    .getElementById("valor")
-                    .value
-            );
-
-
-        // ==========================================
-        // VALIDAÇÕES
-        // ==========================================
-
-        if (!valor || valor <= 0) {
-
-            mostrarErro(
-                "Informe um valor válido para o apadrinhamento."
-            );
-
-            return;
+          throw new Error(
+            resultado.erro ||
+            resultado.message ||
+            "Não foi possível gerar o PIX."
+          );
 
         }
 
+        const dadosPix =
+          resultado;
 
-        if (!nome) {
+        const qrBase64 =
+          dadosPix.qr_code_base64;
 
-            mostrarErro(
-                "Informe seu nome."
-            );
+        const qrCode =
+          dadosPix.qr_code;
 
-            document
-                .getElementById("nome")
-                .focus();
+        const pagamentoId =
+          dadosPix.pagamento_id;
 
-            return;
+        if (!qrBase64 || !qrCode) {
 
-        }
-
-
-        if (!email) {
-
-            mostrarErro(
-                "Informe seu e-mail."
-            );
-
-            document
-                .getElementById("email")
-                .focus();
-
-            return;
+          throw new Error(
+            "O Mercado Pago não retornou os dados do PIX."
+          );
 
         }
 
+        pagamentoAtualId =
+          pagamentoId;
 
-        const pixContainer =
-            document.getElementById(
-                "pixContainer"
-            );
+        /* QR CODE */
 
+        document.getElementById(
+          "pixQrCode"
+        ).src =
+          "data:image/png;base64," +
+          qrBase64;
 
-        pixContainer.style.display =
-            "block";
+        /* COPIA E COLA */
 
+        document.getElementById(
+          "pixCodigo"
+        ).value =
+          qrCode;
 
-        const qr =
-            document.getElementById(
-                "pixQrCode"
-            );
+        /* VALOR */
 
-        const codigo =
-            document.getElementById(
-                "pixCodigo"
-            );
+        document.getElementById(
+          "pixValor"
+        ).textContent =
+          formatarValor(valor);
 
+        /*
+         * Agora escondemos a tela inicial
+         * e mostramos os dados do PIX.
+         */
 
-        qr.src = "";
+        document.getElementById(
+          "pixInicial"
+        ).style.display = "none";
 
-        codigo.value =
-            "Gerando PIX...";
+        document.getElementById(
+          "pixGerado"
+        ).style.display = "block";
 
+        /*
+         * Inicia consulta automática
+         * do status.
+         */
 
-        mostrarStatusPagamento(
-            "aguardando",
-            "⏳ Gerando seu PIX..."
+        iniciarMonitoramentoPagamento(
+          pagamentoId
         );
 
+        console.log(
+          "PIX criado com sucesso:",
+          pagamentoId
+        );
 
-        try {
+      } catch (erro) {
 
-            console.log(
-                "Criando PIX...",
-                {
-                    valor,
-                    nome,
-                    email
-                }
-            );
+        console.error(
+          "Erro ao gerar PIX:",
+          erro
+        );
 
+        mostrarErro(
+          erro.message ||
+          "Não foi possível gerar o PIX."
+        );
 
-            const resposta =
-                await fetch(
-                    "/api/criar-pix",
-                    {
+      } finally {
 
-                        method: "POST",
+        btnGerar.disabled = false;
+        btnNovo.disabled = false;
 
-                        headers: {
-                            "Content-Type":
-                                "application/json"
-                        },
+        btnGerar.textContent =
+          textoOriginalGerar;
 
-                        body:
-                            JSON.stringify({
+        btnNovo.textContent =
+          textoOriginalNovo;
 
-                                transaction_amount:
-                                    valor,
-
-                                nome:
-                                    nome,
-
-                                email:
-                                    email
-
-                            })
-
-                    }
-                );
-
-
-            const resultado =
-                await resposta.json();
-
-
-            console.log(
-                "Resposta criação PIX:",
-                resultado
-            );
-
-
-            if (!resposta.ok) {
-
-                throw new Error(
-                    resultado.erro ||
-                    resultado.mensagem ||
-                    "Não foi possível criar o PIX."
-                );
-
-            }
-
-
-            // ==========================================
-            // DADOS DO PIX
-            // ==========================================
-
-            const dadosPix =
-                resultado;
-
-
-            const qrBase64 =
-                dadosPix.qr_code_base64;
-
-
-            const qrCode =
-                dadosPix.qr_code;
-
-
-            const pagamentoId =
-                dadosPix.pagamento_id;
-
-
-            if (!qrBase64) {
-
-                console.error(
-                    "Resposta sem qr_code_base64:",
-                    resultado
-                );
-
-                throw new Error(
-                    "O Mercado Pago criou o pagamento, mas não retornou o QR Code."
-                );
-
-            }
-
-
-            if (!pagamentoId) {
-
-                throw new Error(
-                    "O pagamento foi criado, mas o ID não foi retornado."
-                );
-
-            }
-
-
-            // ==========================================
-            // MOSTRAR QR CODE
-            // ==========================================
-
-            qr.src =
-                "data:image/png;base64," +
-                qrBase64;
-
-
-            // ==========================================
-            // MOSTRAR PIX COPIA E COLA
-            // ==========================================
-
-            codigo.value =
-                qrCode || "";
-
-
-            // ==========================================
-            // MOSTRAR VALOR
-            // ==========================================
-
-            document
-                .getElementById("pixValor")
-                .textContent =
-                formatarValor(valor);
-
-
-            // ==========================================
-            // INICIAR MONITORAMENTO
-            // ==========================================
-
-            iniciarMonitoramentoPagamento(
-                pagamentoId
-            );
-
-
-            console.log(
-                "PIX criado com sucesso:",
-                pagamentoId
-            );
-
-
-        } catch (erro) {
-
-            console.error(
-                "Erro ao criar PIX:",
-                erro
-            );
-
-
-            codigo.value =
-                "";
-
-
-            mostrarErro(
-                erro.message ||
-                "Não foi possível gerar o PIX. Tente novamente."
-            );
-
-        }
+      }
 
     }
 
-
-    // ==========================================
-    // COPIAR PIX
-    // ==========================================
+    /* ==========================================
+       COPIAR PIX
+       ========================================== */
 
     async function copiarPix() {
 
-        const codigo =
-            document
-                .getElementById("pixCodigo")
-                .value;
+      const campo =
+        document.getElementById("pixCodigo");
 
+      const codigo =
+        campo.value;
 
-        if (!codigo) {
+      if (!codigo) {
+        return;
+      }
 
-            mostrarErro(
-                "O código PIX ainda não foi gerado."
-            );
+      try {
 
-            return;
+        await navigator.clipboard.writeText(
+          codigo
+        );
 
-        }
+        const botao =
+          document.querySelector(
+            ".btn-copiar"
+          );
 
+        const textoOriginal =
+          botao.textContent;
 
-        try {
+        botao.textContent =
+          "✅ PIX copiado!";
 
-            await navigator.clipboard.writeText(
-                codigo
-            );
+        setTimeout(() => {
 
+          botao.textContent =
+            textoOriginal;
 
-            const botao =
-                document.querySelector(
-                    ".btn-copiar"
-                );
+        }, 2000);
 
+      } catch (erro) {
 
-            const textoOriginal =
-                botao.innerHTML;
+        campo.select();
+        document.execCommand("copy");
 
+        alert(
+          "Código PIX copiado!"
+        );
 
-            botao.innerHTML =
-                "✅ Código PIX copiado!";
-
-
-            setTimeout(
-                () => {
-
-                    botao.innerHTML =
-                        textoOriginal;
-
-                },
-                2500
-            );
-
-
-        } catch (erro) {
-
-            console.error(
-                "Erro ao copiar PIX:",
-                erro
-            );
-
-
-            const campo =
-                document.getElementById(
-                    "pixCodigo"
-                );
-
-
-            campo.focus();
-
-            campo.select();
-
-            document.execCommand(
-                "copy"
-            );
-
-
-            alert(
-                "Código PIX copiado."
-            );
-
-        }
+      }
 
     }
 
-
-    // ==========================================
-    // PAYMENT BRICK
-    // ==========================================
+    /* ==========================================
+       PAYMENT BRICK — CARTÃO
+       ========================================== */
 
     async function renderPaymentBrick() {
 
-        const valorInput =
-            document.getElementById(
-                "valor"
+      if (paymentBrick) {
+        return;
+      }
+
+      const container =
+        document.getElementById(
+          "paymentBrick_container"
+        );
+
+      container.innerHTML = "";
+
+      const bricksBuilder =
+        mp.bricks();
+
+      const settings = {
+
+        initialization: {
+          amount: Number(
+            document.getElementById("valor").value
+          )
+        },
+
+        customization: {
+
+          paymentMethods: {
+
+            creditCard: "all",
+
+            debitCard: "all"
+
+          }
+
+        },
+
+        callbacks: {
+
+          onReady: () => {
+
+            console.log(
+              "Payment Brick pronto."
             );
 
+          },
 
-        const valor =
-            Number(
-                valorInput.value
-            );
+          onSubmit: async ({
+            selectedPaymentMethod,
+            formData
+          }) => {
 
-
-        if (!valor || valor <= 0) {
-            return;
-        }
-
-
-        if (paymentBrickController) {
+            esconderErro();
 
             try {
 
-                await paymentBrickController
-                    .unmount();
+              const resposta =
+                await fetch(
+                  "/api/processar-pagamento",
+                  {
+                    method: "POST",
+
+                    headers: {
+                      "Content-Type":
+                        "application/json"
+                    },
+
+                    body: JSON.stringify({
+                      transaction_amount:
+                        Number(
+                          document.getElementById(
+                            "valor"
+                          ).value
+                        ),
+
+                      token:
+                        formData.token,
+
+                      installments:
+                        Number(
+                          formData.installments ||
+                          1
+                        ),
+
+                      payment_method_id:
+                        formData.payment_method_id,
+
+                      issuer_id:
+                        formData.issuer_id,
+
+                      payer: {
+
+                        email:
+                          document.getElementById(
+                            "email"
+                          ).value.trim(),
+
+                        first_name:
+                          document.getElementById(
+                            "nome"
+                          ).value.trim()
+
+                      }
+
+                    })
+
+                  }
+                );
+
+              const resultado =
+                await resposta.json();
+
+              console.log(
+                "Resposta cartão:",
+                resultado
+              );
+
+              if (
+                !resposta.ok ||
+                !resultado.sucesso
+              ) {
+
+                throw new Error(
+                  resultado.erro ||
+                  resultado.message ||
+                  "Não foi possível processar o pagamento."
+                );
+
+              }
+
+              if (
+                resultado.pagamento_id
+              ) {
+
+                pagamentoAtualId =
+                  resultado.pagamento_id;
+
+              }
+
+              const status =
+                String(
+                  resultado.status || ""
+                ).toLowerCase();
+
+              if (
+                status === "approved"
+              ) {
+
+                alert(
+                  "Pagamento confirmado com sucesso! Muito obrigado por apadrinhar um Desbravador."
+                );
+
+              } else {
+
+                alert(
+                  "Pagamento enviado. A confirmação será atualizada automaticamente."
+                );
+
+                if (
+                  resultado.pagamento_id
+                ) {
+
+                  /*
+                   * O status do cartão pode ser
+                   * acompanhado pelo mesmo endpoint.
+                   */
+
+                  iniciarMonitoramentoPagamento(
+                    resultado.pagamento_id
+                  );
+
+                }
+
+              }
 
             } catch (erro) {
 
-                console.warn(
-                    "Não foi possível desmontar o Brick anterior:",
-                    erro
-                );
+              console.error(
+                "Erro no pagamento:",
+                erro
+              );
+
+              mostrarErro(
+                erro.message ||
+                "Não foi possível processar o pagamento."
+              );
 
             }
 
-            paymentBrickController =
-                null;
+          },
 
-        }
-
-
-        const settings = {
-
-            initialization: {
-
-                amount:
-                    valor
-
-            },
-
-
-            customization: {
-
-                paymentMethods: {
-
-                    creditCard:
-                        "all",
-
-                    debitCard:
-                        "all",
-
-                    ticket:
-                        "all"
-
-                }
-
-            },
-
-
-            callbacks: {
-
-                onReady: () => {
-
-                    console.log(
-                        "Payment Brick carregado."
-                    );
-
-                },
-
-
-                onSubmit: async ({
-                    selectedPaymentMethod,
-                    formData
-                }) => {
-
-                    console.log(
-                        "Método selecionado:",
-                        selectedPaymentMethod
-                    );
-
-
-                    const nome =
-                        document
-                            .getElementById("nome")
-                            .value
-                            .trim();
-
-
-                    const email =
-                        document
-                            .getElementById("email")
-                            .value
-                            .trim();
-
-
-                    const valorAtual =
-                        Number(
-                            document
-                                .getElementById("valor")
-                                .value
-                        );
-
-
-                    if (
-                        !valorAtual ||
-                        valorAtual <= 0
-                    ) {
-
-                        alert(
-                            "Informe um valor válido."
-                        );
-
-                        return;
-
-                    }
-
-
-                    if (!nome) {
-
-                        alert(
-                            "Informe seu nome."
-                        );
-
-                        return;
-
-                    }
-
-
-                    if (!email) {
-
-                        alert(
-                            "Informe seu e-mail."
-                        );
-
-                        return;
-
-                    }
-
-
-                    const dadosPagamento = {
-
-                        ...formData,
-
-                        transaction_amount:
-                            valorAtual,
-
-                        payer: {
-
-                            ...(formData.payer || {}),
-
-                            first_name:
-                                nome,
-
-                            email:
-                                email
-
-                        }
-
-                    };
-
-
-                    console.log(
-                        "Enviando pagamento..."
-                    );
-
-
-                    try {
-
-                        const resposta =
-                            await fetch(
-                                "/api/processar-pagamento",
-                                {
-
-                                    method:
-                                        "POST",
-
-                                    headers: {
-
-                                        "Content-Type":
-                                            "application/json"
-
-                                    },
-
-                                    body:
-                                        JSON.stringify(
-                                            dadosPagamento
-                                        )
-
-                                }
-                            );
-
-
-                        const resultado =
-                            await resposta.json();
-
-
-                        console.log(
-                            "Resposta do servidor:",
-                            resultado
-                        );
-
-
-                        if (!resposta.ok) {
-
-                            alert(
-                                "Não foi possível processar o pagamento.\n\n" +
-                                (
-                                    resultado.erro ||
-                                    "Erro desconhecido."
-                                )
-                            );
-
-                            return;
-
-                        }
-
-
-                        const status =
-                            resultado.status;
-
-
-                        const pagamento =
-                            resultado.pagamento;
-
-
-                        const pagamentoId =
-                            pagamento?.id ||
-                            resultado.pagamento_id;
-
-
-                        // ==========================================
-                        // APROVADO
-                        // ==========================================
-
-                        if (
-                            status ===
-                            "approved"
-                        ) {
-
-                            alert(
-                                "Pagamento aprovado com sucesso!\n\n" +
-                                "Valor: R$ " +
-                                formatarValor(
-                                    valorAtual
-                                )
-                            );
-
-                            console.log(
-                                "PAGAMENTO APROVADO:",
-                                pagamento
-                            );
-
-                            return;
-
-                        }
-
-
-                        // ==========================================
-                        // PENDENTE
-                        // ==========================================
-
-                        if (
-                            status ===
-                            "pending"
-                        ) {
-
-                            if (pagamentoId) {
-
-                                pagamentoAtualId =
-                                    pagamentoId;
-
-                                alert(
-                                    "Pagamento pendente.\n\n" +
-                                    "O site continuará aguardando a confirmação automaticamente."
-                                );
-
-                                iniciarMonitoramentoPagamento(
-                                    pagamentoId
-                                );
-
-                            } else {
-
-                                alert(
-                                    "Pagamento pendente.\n\n" +
-                                    "Aguardando confirmação do Mercado Pago."
-                                );
-
-                            }
-
-                            return;
-
-                        }
-
-
-                        // ==========================================
-                        // EM ANÁLISE
-                        // ==========================================
-
-                        if (
-                            status ===
-                            "in_process"
-                        ) {
-
-                            if (pagamentoId) {
-
-                                iniciarMonitoramentoPagamento(
-                                    pagamentoId
-                                );
-
-                            }
-
-                            alert(
-                                "Pagamento em análise pelo Mercado Pago.\n\n" +
-                                "O sistema continuará aguardando a confirmação."
-                            );
-
-                            return;
-
-                        }
-
-
-                        // ==========================================
-                        // RECUSADO
-                        // ==========================================
-
-                        if (
-                            status ===
-                            "rejected"
-                        ) {
-
-                            alert(
-                                "Pagamento recusado.\n\n" +
-                                "Verifique os dados ou tente outra forma de pagamento."
-                            );
-
-                            console.error(
-                                "PAGAMENTO RECUSADO:",
-                                pagamento
-                            );
-
-                            return;
-
-                        }
-
-
-                        alert(
-                            resultado.mensagem ||
-                            "Pagamento recebido. Aguardando confirmação."
-                        );
-
-
-                    } catch (erro) {
-
-                        console.error(
-                            "Erro de comunicação:",
-                            erro
-                        );
-
-
-                        alert(
-                            "Erro ao conectar com o servidor.\n\n" +
-                            "Tente novamente."
-                        );
-
-                    }
-
-                },
-
-
-                onError: (error) => {
-
-                    console.error(
-                        "Erro no Payment Brick:",
-                        error
-                    );
-
-                }
-
-            }
-
-        };
-
-
-        try {
-
-            paymentBrickController =
-                await bricksBuilder.create(
-                    "payment",
-                    "paymentBrick_container",
-                    settings
-                );
-
-        } catch (erro) {
+          onError: (error) => {
 
             console.error(
-                "Erro ao criar Payment Brick:",
-                erro
+              "Erro no Payment Brick:",
+              error
             );
 
+            mostrarErro(
+              "Ocorreu um erro no formulário de pagamento."
+            );
+
+          }
+
         }
+
+      };
+
+      paymentBrick =
+        await bricksBuilder.create(
+          "payment",
+          "paymentBrick_container",
+          settings
+        );
 
     }
 
+    /* ==========================================
+       INICIALIZAÇÃO
+       ========================================== */
 
-    // ==========================================
-    // ALTERAÇÃO MANUAL DO VALOR
-    // ==========================================
+    document.addEventListener(
+      "DOMContentLoaded",
+      () => {
 
-    document
-        .getElementById("valor")
-        .addEventListener(
-            "change",
-            () => {
+        /*
+         * PIX começa selecionado,
+         * porém SEM QR CODE.
+         */
 
-                esconderErro();
+        selecionarPagamento("pix");
 
+      }
+    );
 
-                if (
-                    formaPagamentoAtual ===
-                    "cartao"
-                ) {
-
-                    renderPaymentBrick();
-
-                }
-
-            }
-        );
-
-
-    // ==========================================
-    // VALOR INICIAL
-    // ==========================================
-
-    document
-        .getElementById("valor")
-        .value =
-        50;
-
-
-    // ==========================================
-    // INICIALIZAÇÃO
-    // ==========================================
-
-    selecionarPagamento("pix");
-
-</script>
+  </script>
 
 </body>
 </html>
