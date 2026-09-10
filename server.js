@@ -84,10 +84,37 @@ app.post("/api/processar-pagamento", async (req, res) => {
             }
         });
 
-        res.json({
-            sucesso: true,
-            pagamento: resultado
-        });
+        const status = resultado.status;
+
+let mensagem;
+
+switch (status) {
+    case "approved":
+        mensagem = "Pagamento aprovado com sucesso!";
+        break;
+
+    case "pending":
+        mensagem = "Pagamento pendente. Aguarde a confirmação.";
+        break;
+
+    case "in_process":
+        mensagem = "Pagamento em análise pelo Mercado Pago.";
+        break;
+
+    case "rejected":
+        mensagem = "Pagamento recusado. Verifique os dados e tente novamente.";
+        break;
+
+    default:
+        mensagem = "Pagamento recebido. Aguardando confirmação.";
+}
+
+res.json({
+    sucesso: true,
+    status: status,
+    mensagem: mensagem,
+    pagamento: resultado
+});
 
     } catch (erro) {
         console.error("Erro ao processar pagamento:", erro);
