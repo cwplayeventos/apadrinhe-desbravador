@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Apadrinhe um Desbravador</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #500202;
+            color: #17202a;
+        }
+
+        .topo {
+            background: #000000;
+            color: white;
+            text-align: center;
+            padding: 35px 20px;
+        }
+
+        .topo h1 {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .topo p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        .brand-logo {
+            width: 100px;
+            height: 100px;
+            object-fit: contain; /* Evita que o seu logo fique esticado ou achatado */
+            vertical-align: middle; /* Alinha o logo verticalmente caso haja texto ao lado */
+        }
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .card h2 {
+            text-align: center;
+            color: #071a33;
+            margin-bottom: 10px;
+        }
+
+        .descricao {
+            text-align: center;
+            color: #667085;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .valor-label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .valor {
+            width: 100%;
+            padding: 16px;
+            font-size: 24px;
+            text-align: center;
+            border: 2px solid #d0d5dd;
+            border-radius: 10px;
+            outline: none;
+        }
+
+        .valor:focus {
+            border-color: #d9a441;
+        }
+
+        .valores {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 20px 0 30px;
+        }
+
+        .valor-btn {
+            padding: 12px 5px;
+            border: 1px solid #d0d5dd;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .valor-btn:hover {
+            border-color: #d9a441;
+            background: #fffaf0;
+        }
+
+        .campo {
+            margin-bottom: 18px;
+        }
+
+        .campo label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        .campo input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #d0d5dd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .botao {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            background: #d9a441;
+            color: #071a33;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .botao:hover {
+            opacity: 0.9;
+        }
+
+        .seguranca {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #667085;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: #667085;
+            font-size: 13px;
+        }
+#paymentBrick_container {
+    margin-top: 25px;
+}
+        @media (max-width: 500px) {
+            .topo h1 {
+                font-size: 24px;
+            }
+
+            .card {
+                padding: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="topo">
+        <a class="brand" href="#">
+  <img src="assets/logo.png" alt="Guerreiros do Baca" class="brand-logo">
+</a>
+        <h1>APADRINHE UM DESBRAVADOR</h1>
+        <p>Uma oportunidade pode mudar uma vida inteira.</p>
+    </header>
+
+    <main class="container">
+
+        <div class="card">
+
+            <h2>Quero fazer parte dessa história</h2>
+
+            <p class="descricao">
+                Escolha um valor para contribuir com a participação
+                de um Desbravador no Campori DSA 2027 em Barretos.
+            </p>
+
+            <label class="valor-label">
+                Quanto você deseja contribuir?
+            </label>
+
+            <input
+                type="number"
+                id="valor"
+                class="valor"
+                min="1"
+                step="0.01"
+                placeholder="R$ 0,00"
+            >
+
+            <div class="valores">
+                <button class="valor-btn" onclick="selecionarValor(50)">
+                    R$ 50
+                </button>
+
+                <button class="valor-btn" onclick="selecionarValor(100)">
+                    R$ 100
+                </button>
+
+                <button class="valor-btn" onclick="selecionarValor(200)">
+                    R$ 200
+                </button>
+
+                <button class="valor-btn" onclick="selecionarValor(500)">
+                    R$ 500
+                </button>
+
+                <button class="valor-btn" onclick="selecionarValor(1000)">
+                    R$ 1.000
+                </button>
+
+                <button class="valor-btn" onclick="selecionarValor(2000)">
+                    R$ 2.000
+                </button>
+            </div>
+
+            <div class="campo">
+                <label for="nome">Seu nome</label>
+                <input
+                    type="text"
+                    id="nome"
+                    placeholder="Digite seu nome"
+                >
+            </div>
+
+            <div class="campo">
+                <label for="email">Seu e-mail</label>
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Digite seu e-mail"
+                >
+            </div>
+
+            
+<div id="paymentBrick_container"></div>
+            <p class="seguranca">
+                🔒 Pagamento processado com segurança pelo Mercado Pago.
+            </p>
+
+        </div>
+
+    </main>
+
+    <footer>
+        Clube de Desbravadores Guerreiros do Baca | DSA Barretos • 2027
+    </footer>
+
+    <script>
+        function selecionarValor(valor) {
+            document.getElementById("valor").value = valor;
+        }
+
+        function continuarPagamento() {
+            const valor = document.getElementById("valor").value;
+            const nome = document.getElementById("nome").value;
+            const email = document.getElementById("email").value;
+
+            if (!valor || valor <= 0) {
+                alert("Informe o valor que deseja contribuir.");
+                return;
+            }
+
+            if (!nome) {
+                alert("Informe seu nome.");
+                return;
+            }
+
+            if (!email) {
+                alert("Informe seu e-mail.");
+                return;
+            }
+
+            alert(
+                "Dados preenchidos corretamente!\\n\\n" +
+                "Valor: R$ " + valor + "\\n" +
+                "Nome: " + nome + "\\n" +
+                "E-mail: " + email
+            );
+        }
+    </script>
+<script src="https://sdk.mercadopago.com/js/v2"></script>
+
+<script>
+    const publicKey = "APP_USR-2ff07342-e525-474d-9e83-565c85d95e20";
+
+    const mp = new MercadoPago(publicKey);
+
+    const bricksBuilder = mp.bricks();
+
+    async function renderPaymentBrick() {
+
+        const settings = {
+            initialization: {
+                amount: 50
+            },
+
+            customization: {
+                paymentMethods: {
+                    creditCard: "all",
+                    debitCard: "all",
+                    ticket: "all",
+                    bankTransfer: "all"
+                }
+            },
+
+            callbacks: {
+                onReady: () => {
+                    console.log("Payment Brick carregado!");
+                },
+
+                onSubmit: async ({ selectedPaymentMethod, formData }) => {
+
+    console.log("Método selecionado:", selectedPaymentMethod);
+    console.log("Dados do formulário:", formData);
+
+    try {
+
+        const resposta = await fetch("/api/processar-pagamento", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formData)
+        });
+
+        const resultado = await resposta.json();
+
+        console.log("Resposta do servidor:", resultado);
+
+        if (resultado.sucesso) {
+
+            alert("Pagamento enviado com sucesso!");
+
+            console.log("Pagamento Mercado Pago:", resultado.pagamento);
+
+        } else {
+
+            alert("Não foi possível processar o pagamento.");
+
+            console.error("Erro:", resultado.erro);
+        }
+
+    } catch (erro) {
+
+        console.error("Erro de comunicação:", erro);
+
+        alert("Erro ao conectar com o servidor.");
+    }
+                },
+
+                onError: (error) => {
+                    console.error("Erro no Payment Brick:", error);
+                }
+            }
+        };
+
+        const paymentBrickController = await bricksBuilder.create(
+            "payment",
+            "paymentBrick_container",
+            settings
+        );
+    }
+
+    renderPaymentBrick();
+</script>
+</body>
+</html>
