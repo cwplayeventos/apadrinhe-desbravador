@@ -1,4 +1,3 @@
-
 require("dotenv").config();
 
 const crypto = require("crypto");
@@ -9,29 +8,20 @@ const { MercadoPagoConfig, Payment } = require("mercadopago");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// ==========================================
-// CONFIGURAÇÃO DO MERCADO PAGO
-// ==========================================
-
 const client = new MercadoPagoConfig({
     accessToken: process.env.MP_ACCESS_TOKEN
 });
 
 const payment = new Payment(client);
 
-// ==========================================
-// CONFIGURAÇÕES DO SERVIDOR
-// ==========================================
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// Página do checkout
 app.use(express.static(path.join(__dirname, "public")));
 
-// ==========================================
-// ROTA DE STATUS
-// ==========================================
+
+/* =========================================================
+   STATUS DO SERVIDOR
+========================================================= */
 
 app.get("/api/status", (req, res) => {
     res.json({
@@ -40,9 +30,10 @@ app.get("/api/status", (req, res) => {
     });
 });
 
-// ==========================================
-// CRIAR PAGAMENTO DE TESTE
-// ==========================================
+
+/* =========================================================
+   PAGAMENTO PIX DE TESTE
+========================================================= */
 
 app.post("/api/criar-pagamento-teste", async (req, res) => {
     try {
@@ -54,6 +45,9 @@ app.post("/api/criar-pagamento-teste", async (req, res) => {
                 payer: {
                     email: "test_payer_123@testuser.com"
                 }
+            },
+            requestOptions: {
+                idempotencyKey: crypto.randomUUID()
             }
         });
 
@@ -63,7 +57,7 @@ app.post("/api/criar-pagamento-teste", async (req, res) => {
         });
 
     } catch (erro) {
-        console.error("Erro ao criar pagamento:", erro);
+        console.error("Erro ao criar pagamento de teste:", erro);
 
         res.status(500).json({
             sucesso: false,
@@ -72,25 +66,19 @@ app.post("/api/criar-pagamento-teste", async (req, res) => {
     }
 });
 
-// ==========================================
-// PROCESSAR PAGAMENTO
-// ==========================================
 
-app.post("/api/processar-pagamento", async (req, res) => {
+/* =========================================================
+   NOVO ENDPOINT - CRIAR PIX
+========================================================= */
+
+app.post("/api/criar-pix", async (req, res) => {
     try {
 
         const {
             transaction_amount,
-            token,
-            installments,
-            payment_method_id,
-            issuer_id,
-            payer
+            nome,
+            email
         } = req.body;
-
-        // ==========================================
-        // VALIDAÇÃO DO VALOR
-        // ==========================================
 
         const valor = Number(transaction_amount);
 
@@ -102,6 +90,10 @@ app.post("/api/processar-pagamento", async (req, res) => {
             1000,
             2000
         ];
+
+        /* ---------------------------------------------
+           VALIDAÇÃO DO VALOR
+        --------------------------------------------- */
 
         if (!Number.isFinite(valor) || valor <= 0) {
             return res.status(400).json({
@@ -117,9 +109,175 @@ app.post("/api/processar-pagamento", async (req, res) => {
             });
         }
 
-        // ==========================================
-        // VALIDAÇÃO DO PAGADOR
-        // ==========================================
+
+        /* ---------------------------------------------
+           VALIDAÇÃO DO NOME
+        --------------------------------------------- */
+
+        if (!nome || nome.trim().length < 2) {
+            return res.status(400).json({
+                sucesso: false,
+                erro: "Informe seu nome."
+            });
+        }
+
+
+        /* ---------------------------------------------
+           VALIDAÇÃO DO E-MAIL
+        --------------------------------------------- */
+
+        if (!email || !email.includes("@")) {
+            return res.status(400).json({
+                sucesso: false,
+                erro: "Informe um e-mail válido."
+            });
+        }
+
+
+        /* ---------------------------------------------
+           CRIAÇÃO DO PIX
+        --------------------------------------------- */
+
+        const descricaoPagamento =
+            "Apadrinhe um Desbravador - Campori Barretos 2027";
+
+        const resultado = await payment.create({
+
+            body: {
+                transaction_amount: valor,
+
+                description: descricaoPagamento,
+
+                payment_method_id: "pix",
+
+                payer: {
+                    email: email.trim(),
+                    first_name: nome.trim()
+                }
+            },
+
+            requestOptions: {
+                idempotencyKey: crypto.randomUUID()
+            }
+
+        });
+
+
+        /* ---------------------------------------------
+           DADOS DO PIX
+        --------------------------------------------- */
+
+        const transactionData =
+            resultado?.point_of_interaction?.transaction_data;
+
+        if (!transactionData) {
+
+            console.error(
+                "Mercado Pago não retornou os dados do PIX:",
+                resultado
+            );
+
+            return res.status(500).json({
+                sucesso: false,
+                erro: "O Mercado Pago não retornou os dados do PIX."
+            });
+        }
+
+
+        /* ---------------------------------------------
+           RESPOSTA
+        --------------------------------------------- */
+
+        res.json({
+
+            sucesso: true,
+
+            status: resultado.status,
+
+            status_detail: resultado.status_detail,
+
+            pagamento_id: resultado.id,
+
+            qr_code: transactionData.qr_code,
+
+            qr_code_base64:
+                transactionData.qr_code_base64,
+
+            ticket_url:
+                transactionData.ticket_url || null,
+
+            expiracao:
+                resultado.date_of_expiration || null
+
+        });
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao criar pagamento PIX:",
+            erro
+        );
+
+        res.status(500).json({
+            sucesso: false,
+            erro:
+                erro.message ||
+                "Erro ao criar pagamento PIX."
+        });
+    }
+});
+
+
+/* =========================================================
+   PAGAMENTO COM CARTÃO
+========================================================= */
+
+app.post("/api/processar-pagamento", async (req, res) => {
+    try {
+
+        const {
+            transaction_amount,
+            token,
+            installments,
+            payment_method_id,
+            issuer_id,
+            payer
+        } = req.body;
+
+        const valor = Number(transaction_amount);
+
+        const valoresPermitidos = [
+            50,
+            100,
+            200,
+            500,
+            1000,
+            2000
+        ];
+
+
+        /* ---------------------------------------------
+           VALIDAÇÃO DO VALOR
+        --------------------------------------------- */
+
+        if (!Number.isFinite(valor) || valor <= 0) {
+            return res.status(400).json({
+                sucesso: false,
+                erro: "Valor de pagamento inválido."
+            });
+        }
+
+        if (!valoresPermitidos.includes(valor)) {
+            return res.status(400).json({
+                sucesso: false,
+                erro: "Este valor não está disponível para apadrinhamento."
+            });
+        }
+
+
+        /* ---------------------------------------------
+           VALIDAÇÃO DO PAGADOR
+        --------------------------------------------- */
 
         if (!payer || !payer.email) {
             return res.status(400).json({
@@ -128,125 +286,176 @@ app.post("/api/processar-pagamento", async (req, res) => {
             });
         }
 
-        // ==========================================
-        // DADOS CONTROLADOS PELO SERVIDOR
-        // ==========================================
+
+        /* ---------------------------------------------
+           DESCRIÇÃO
+        --------------------------------------------- */
 
         const descricaoPagamento =
             "Apadrinhe um Desbravador - Campori Barretos 2027";
 
-        // ==========================================
-        // CRIAÇÃO DO PAGAMENTO
-        // ==========================================
+
+        /* ---------------------------------------------
+           CRIAÇÃO DO PAGAMENTO
+        --------------------------------------------- */
 
         const resultado = await payment.create({
 
             body: {
+
                 transaction_amount: valor,
 
                 token,
 
                 description: descricaoPagamento,
 
-                installments: Number(installments),
+                installments:
+                    Number(installments),
 
                 payment_method_id,
 
                 issuer_id,
 
                 payer
+
             },
 
             requestOptions: {
                 idempotencyKey: crypto.randomUUID()
             }
+
         });
 
-        // ==========================================
-        // INTERPRETAÇÃO DO STATUS
-        // ==========================================
+
+        /* ---------------------------------------------
+           STATUS
+        --------------------------------------------- */
 
         const status = resultado.status;
 
         let mensagem;
 
+
         switch (status) {
 
             case "approved":
-                mensagem = "Pagamento aprovado com sucesso!";
+
+                mensagem =
+                    "Pagamento aprovado com sucesso!";
+
                 break;
+
 
             case "pending":
-                mensagem = "Pagamento pendente. Aguarde a confirmação.";
+
+                mensagem =
+                    "Pagamento pendente. Aguarde a confirmação.";
+
                 break;
+
 
             case "in_process":
-                mensagem = "Pagamento em análise pelo Mercado Pago.";
+
+                mensagem =
+                    "Pagamento em análise pelo Mercado Pago.";
+
                 break;
+
 
             case "rejected":
+
                 mensagem =
                     "Pagamento recusado. Verifique os dados e tente novamente.";
+
                 break;
 
+
             default:
+
                 mensagem =
                     "Pagamento recebido. Aguardando confirmação.";
+
         }
 
-        // ==========================================
-        // RESPOSTA PARA O CHECKOUT
-        // ==========================================
+
+        /* ---------------------------------------------
+           RESPOSTA
+        --------------------------------------------- */
 
         res.json({
+
             sucesso: true,
+
             status: status,
+
             mensagem: mensagem,
+
             pagamento: resultado
+
         });
 
     } catch (erro) {
 
-        console.error("Erro ao processar pagamento:", erro);
+        console.error(
+            "Erro ao processar pagamento:",
+            erro
+        );
 
         res.status(500).json({
+
             sucesso: false,
-            erro: erro.message || "Erro ao processar pagamento"
+
+            erro:
+                erro.message ||
+                "Erro ao processar pagamento"
+
         });
     }
 });
 
-// ==========================================
-// INICIAR SERVIDOR
-// ==========================================
+
+/* =========================================================
+   INICIALIZAÇÃO DO SERVIDOR
+========================================================= */
 
 const servidor = app.listen(PORT, () => {
+
     console.log(
         `Servidor rodando em http://localhost:${PORT}`
     );
+
 });
 
-// ==========================================
-// TRATAMENTO DE ERROS DO SERVIDOR
-// ==========================================
+
+/* =========================================================
+   TRATAMENTO DE ERROS
+========================================================= */
 
 servidor.on("error", (erro) => {
+
     console.error(
         "ERRO NO SERVIDOR:",
         erro
     );
+
 });
 
+
 process.on("exit", (codigo) => {
+
     console.log(
         "PROCESSO NODE ENCERRADO. Código:",
         codigo
     );
+
 });
 
+
 process.on("uncaughtException", (erro) => {
+
     console.error(
         "ERRO NÃO TRATADO:",
         erro
     );
+
 });
