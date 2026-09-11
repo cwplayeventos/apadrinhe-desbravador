@@ -194,8 +194,16 @@
     }
 
     .pix-inicial-icon {
-      font-size: 35px;
-      margin-bottom: 10px;
+       display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    }
+
+.pix-inicial-icon img {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
     }
 
     .pix-inicial strong {
@@ -521,7 +529,7 @@
         <div id="pixInicial" class="pix-inicial">
 
           <div class="pix-inicial-icon">
-            💠
+    <img src="/assets/pixlogo.png" alt="PIX">
           </div>
 
           <strong>Pagamento via PIX</strong>
